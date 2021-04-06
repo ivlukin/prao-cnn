@@ -12,13 +12,13 @@
 
 class TimeCoordinate {
 private:
-    double beginDateTime;
+    double beginDateTime{};
     std::vector<double> timeCoordinatesWithSameStarTime;
 
 private:
-   void generateStarTimes(double beginStarTime, double endStarTime);
+   void generateStarTimes(double beginStarTime, int observationLength);
 public:
-    TimeCoordinate(double beginStarTime, double endStartTime);
+    TimeCoordinate(double beginStarTime, int observationLength);
 
     TimeCoordinate() = default;
 

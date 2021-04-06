@@ -12,7 +12,7 @@ Config::Config(char *fileName) {
     fclose(fp);
 
     assert(d.HasMember("startDate")); // date of observation started
-    assert(d.HasMember("endDate")); // date of observation ended
+    assert(d.HasMember("observationLength")); // length of observation (in days)
     assert(d.HasMember("range")); // north or south
     assert(d.HasMember("step")); // scan step (in seconds)
     assert(d.HasMember("outputPath")); // directory for storing results
@@ -23,7 +23,7 @@ Config::Config(char *fileName) {
 
     this->startDate= d["startDate"].GetString();
     this->outputPath = d["outputPath"].GetString();
-    this->endDate = d["endDate"].GetString();
+    this->observationLength = d["observationLength"].GetInt();
     this->range = d["range"].GetString();
     this->step = d["step"].GetInt();
     this->mode = d["mode"].GetString();
@@ -34,10 +34,6 @@ Config::Config(char *fileName) {
 
 const std::string &Config::getStartDate() const {
     return startDate;
-}
-
-const std::string &Config::getEndDate() const {
-    return endDate;
 }
 
 
@@ -67,4 +63,8 @@ const std::string &Config::getCalibrationListPath() const {
 
 double Config::getDurationStarSeconds() const {
     return durationStarSeconds;
+}
+
+int Config::getObservationLength() const {
+    return observationLength;
 }

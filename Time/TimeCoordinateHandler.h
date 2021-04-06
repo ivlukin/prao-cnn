@@ -18,7 +18,7 @@
 class TimeCoordinateHandler {
 private:
     tm startDate{};
-    tm endDate{};
+    int observationLength;
     int step;
     std::vector<TimeCoordinate> timeCoordinateSet;
     FilesListItem firstFile;

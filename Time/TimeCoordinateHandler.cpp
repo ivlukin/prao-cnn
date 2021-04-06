@@ -5,7 +5,7 @@
 
 TimeCoordinateHandler::TimeCoordinateHandler(const Config &config) {
     this->startDate = getDateTimeFromString(config.getStartDate());
-    this->endDate = getDateTimeFromString(config.getEndDate());
+    this->observationLength = config.getObservationLength();
     this->step = config.getStep();
     this->fileListPath = config.getFileListPath();
     this->range = config.getRange();
@@ -42,10 +42,9 @@ void TimeCoordinateHandler::generateTimeCoordinates() {
 
     double startDateTimeLocal = to_starTime(mktime(&this->startDate));
     startDateTimeLocal += firstFile.star_time_start;
-    double endDateTimeLocal = to_starTime(mktime(&this->endDate));
     int numIterations = (int) (to_SunTime(3600 * 24) / this->step);
     for (int i = 0; i < numIterations; ++i) {
-        TimeCoordinate timeCoordinate = TimeCoordinate(startDateTimeLocal, endDateTimeLocal);
+        TimeCoordinate timeCoordinate = TimeCoordinate(startDateTimeLocal, observationLength);
         timeCoordinateSet.push_back(timeCoordinate);
         startDateTimeLocal += this->step;
     }

@@ -15,14 +15,59 @@ class Config {
 public:
     explicit Config(char* fileName);
 private:
+    /**
+     * Дата начала наблюдений
+     * Из этой даты начинаются высчитываться имена файлов, из которых нужно считывать данные
+     * @see TimeCoordinateHandler::getFileNameFromDate
+     * Формат: YYYY-MM-DD HH:MM:SS (например 2014-10-01 00:00:00)
+     * ВАЖНО: часовой пояс MSK (строго говоря, в том часовом поясе, в котором названы файлы)
+     * (это время затем автоматически конвертируется в звездное и расчеты идут в нем)
+     */
     std::string startDate;
-    std::string endDate;
+    /**
+     * Длина наблюдений (в звездных сутках)
+     * целесообразно ставить >=1 :)
+     */
+    int observationLength;
+
+    /**
+     * Северная или южная стойка
+     * (N1 или S1 и тд)
+     * Нужно опять же для корректного формирования списка файлов
+     * TimeCoordinateHandler::getFileNameFromDate
+     */
     std::string range;
+
+    /**
+     * Шаг (в звездных секундах) с которым нужно снимать отрезок данных для преобразования Фурье
+     * Целесообразно согласно теореме Котельникова задавать значения
+     * <= durationStarSeconds /2
+     * @see durationStarSeconds
+     */
     int step;
+
+    /**
+     * Директория, в которую нужно складывать выходные результаты
+     */
     std::string outputPath;
+
+    /**
+     * В каком режиме велись наблюдения.
+     * Здесь указывается расширение файла - .pnt или .pnthr
+     */
     std::string mode;
+    /**
+     * Путь к файлу, где указываются фактические местоположения файлов с данными
+     */
     std::string fileListPath;
+    /**
+     * Путь к файлу, где указываются калибровочные данные
+     */
     std::string calibrationListPath;
+
+    /**
+     * Длина отрезка данных для преобразования Фурье (в звездных секундах)
+     */
     double durationStarSeconds;
 public:
     const std::string &getStartDate() const;
@@ -43,6 +88,8 @@ public:
     const std::string &getCalibrationListPath() const;
 
     double getDurationStarSeconds() const;
+
+    int getObservationLength() const;
 };
 
 
