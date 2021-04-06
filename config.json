@@ -1,0 +1,12 @@
+{
+  "startDate": "2014-10-01 00:00:00",
+  "endDate": "2014-10-15 00:00:00",
+  "storage": "/media/sorrow/Data/prao/north rays/",
+  "range": "N1",
+  "step": 60,
+  "outputPath": "/home/sorrow/prao-output/",
+  "mode": ".pnt",
+  "fileListPath": "/home/sorrow/CLionProjects/prao-compresser/resources/filesListSmall.txt",
+  "calibrationListPath": "/home/sorrow/CLionProjects/prao-compresser/resources/smallCalibrationFull.txt",
+  "durationStarSeconds": 204.8
+}
