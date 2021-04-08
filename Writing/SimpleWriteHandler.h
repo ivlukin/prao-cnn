@@ -26,6 +26,7 @@ private:
     std::string getDirPathFromTm(tm *dateTime);
 
     std::string getSystemSeparator();
+    void createDirectory(const std::string& dirPath);
 
 public:
     SimpleWriteHandler(const Config &config, std::vector<Timestamp> calculatedData, TimeCoordinate coordinate) {

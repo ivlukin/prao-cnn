@@ -15,14 +15,11 @@ void SimpleWriteHandler::write() {
     std::string dirPath = getDirPathFromTm(beginDateTimeTm);
     std::string totalDirPath = outputPath + getSystemSeparator() + dirPath;
 
-#ifdef _WIN32
-    CreateDirectory(totalDirPath.c_str(), nullptr);
-#else
-    mkdir(totalDirPath.c_str(), 0777);
-#endif
+    createDirectory(totalDirPath);
     for (Timestamp timestamp: calculatedData) {
         std::string subDirPath = totalDirPath + getSystemSeparator() +
                                  getDirPathFromTm(timestamp.getTimestamp());
+        createDirectory(subDirPath);
         for (const auto &raySummaryEntry: timestamp.getRayMap()) {
             int ray_num = raySummaryEntry.first + 1;
             Ray thisRay = raySummaryEntry.second;
@@ -91,14 +88,18 @@ SimpleWriteHandler::writeToFile(const std::string &filepath, int ray_num, const 
 
     out.close();
 
-    std::vector<float> resultAsFloat = std::vector<float>();
-    resultAsFloat.reserve(fourierResult.size());
-    for (double value: fourierResult)
-        resultAsFloat.push_back((float) value);
 
     FILE *f = fopen(filepath.c_str(), "ab");
-    size_t resultSize = resultAsFloat.size();
-    fwrite(&resultAsFloat[0], sizeof(std::vector<float>::value_type), resultSize, f);
+    size_t resultSize = fourierResult.size();
+    fwrite(&fourierResult[0], sizeof(std::vector<float>::value_type), resultSize, f);
 
     fclose(f);
+}
+
+void SimpleWriteHandler::createDirectory(const std::string &dirPath) {
+#ifdef _WIN32
+    CreateDirectory(dirPath.c_str(), nullptr);
+#else
+    mkdir(dirPath.c_str(), 0777);
+#endif
 }

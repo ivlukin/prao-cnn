@@ -1,12 +1,12 @@
 {
   "startDate": "2015-01-01 00:00:00",
-  "observationLength": 1,
+  "observationLength": 3,
   "range": "N1",
   "step": 60,
-  "outputPath": "/home/sorrow/prao-output-01-01-15/",
+  "outputPath": "/home/sorrow/prao-output-01-01-15",
   "mode": ".pnt",
-  "fileListPath": "/home/sorrow/CLionProjects/prao-fourier/01-15-list-files.txt",
-  "calibrationListPath": "/home/sorrow/CLionProjects/prao-fourier/01-15-calb.txt",
+  "fileListPath": "/home/sorrow/CLionProjects/prao-cnn/01-15-list-files.txt",
+  "calibrationListPath": "/home/sorrow/CLionProjects/prao-cnn/01-15-calb.txt",
   "durationStarSeconds": 204.8,
   "summationEnabled": false
 }

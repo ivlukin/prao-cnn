@@ -7,7 +7,7 @@ int FourierHandler::run() {
     for (auto const &entry: this->fileItemToTimestampsMap) {
         FilesListItem item = entry.first;
         std::vector<tm *> timeStamps = entry.second;
-        DataSeeker *seeker = new DataSeeker(item.filepath);
+        auto *seeker = new DataSeeker(item.filepath);
         seeker->setCalibrationData(this->storage);
         int size = item.nbands == 33 ? 2048 * 8 : 2048; // сейчас захардкожено, вообще надо из duration считать
         for (tm *timestamp: timeStamps) {
@@ -17,6 +17,7 @@ int FourierHandler::run() {
             if (timeElapsedFromHourBegin + this->duration > 3600) {
                 int tail = (int) (timeElapsedFromHourBegin + this->duration) - 3600 + 1;
                 timeElapsedFromHourBegin -= tail;
+                std::cout<<"end of file is near. shifting left: " << tail << std::endl;
             }
             Timestamp skyTimestamp = Timestamp(timestamp);
             for (int _ray = 0; _ray < 48; _ray++) {

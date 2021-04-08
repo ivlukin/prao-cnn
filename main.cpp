@@ -57,7 +57,10 @@ int main(int argc, char **argv) {
          * проверить рваное считывание, когда искомые данные лежат на границе файла (либо их вообще выпилить нахер)
          * also TODO
          * написать уже наконец нормальную калибровку
+         * also TODO
+         * проверить что время и файлы синхронизированы
          */
+
         if (config.isSummationEnabled()) {
             SummationHandler summarizeHandler = SummationHandler(fourierHandler.getCalculatedData());
             SummationWriteHandler writeHandler = SummationWriteHandler(config,
