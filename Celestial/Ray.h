@@ -12,6 +12,7 @@ private:
     std::map<int, std::vector<float>> bandMap;
     int number;
     std::vector<float> bandSummary;
+    std::vector<float> average;
     void calculateBandSummary();
 public:
     Ray() = default;
@@ -22,6 +23,8 @@ public:
     void setBandMap(const std::map<int, std::vector<float>> &bandMap) {
         Ray::bandMap = bandMap;
     }
+
+    std::vector<float> &getBandAverage();
 };
 
 

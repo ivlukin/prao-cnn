@@ -21,6 +21,7 @@ Config::Config(char *fileName) {
     assert(d.HasMember("calibrationListPath")); // path to .txt file with calibration data
     assert(d.HasMember("durationStarSeconds")); // duration of batch in star seconds
     assert(d.HasMember("summationEnabled"));
+    assert(d.HasMember("frequencyAverage"));
 
     this->startDate= d["startDate"].GetString();
     this->outputPath = d["outputPath"].GetString();
@@ -32,6 +33,7 @@ Config::Config(char *fileName) {
     this->calibrationListPath = d["calibrationListPath"].GetString();
     this->durationStarSeconds = d["durationStarSeconds"].GetDouble();
     this->summationEnabled = d["summationEnabled"].GetBool();
+    this->frequencyAverage = d["frequencyAverage"].GetBool();
 }
 
 const std::string &Config::getStartDate() const {
@@ -73,4 +75,8 @@ int Config::getObservationLength() const {
 
 bool Config::isSummationEnabled() const {
     return summationEnabled;
+}
+
+bool Config::isFrequencyAverage() const {
+    return frequencyAverage;
 }

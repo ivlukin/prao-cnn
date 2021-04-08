@@ -27,12 +27,14 @@ private:
 
     std::string getSystemSeparator();
     void createDirectory(const std::string& dirPath);
+    bool frequencyAverage;
 
 public:
     SimpleWriteHandler(const Config &config, std::vector<Timestamp> calculatedData, TimeCoordinate coordinate) {
         this->outputPath = config.getOutputPath();
         this->calculatedData = std::move(calculatedData);
         this->timeCoordinate = std::move(coordinate);
+        this->frequencyAverage = config.isFrequencyAverage();
     }
 
     void write();

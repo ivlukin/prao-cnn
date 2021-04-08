@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
          */
 
         if (config.isSummationEnabled()) {
-            SummationHandler summarizeHandler = SummationHandler(fourierHandler.getCalculatedData());
+            SummationHandler summarizeHandler = SummationHandler(config, fourierHandler.getCalculatedData());
             SummationWriteHandler writeHandler = SummationWriteHandler(config,
                                                                        summarizeHandler.getSummaryForEveryRayInTime(),
                                                                        coordinate);

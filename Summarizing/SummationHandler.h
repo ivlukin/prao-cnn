@@ -6,15 +6,18 @@
 #include <utility>
 #include <vector>
 #include "../Celestial/Timestamp.h"
+#include "../Config/Config.h"
 
 class SummationHandler {
 private:
     std::vector<Timestamp> relatedTimestamps;
     std::map<int, std::vector<double>> summaryForEveryRayInTime;
     bool isCalculated = false;
+    bool frequencyAverage;
 public:
-    explicit SummationHandler(std::vector<Timestamp> relatedTimestamps) {
+    SummationHandler(const Config& config, std::vector<Timestamp> relatedTimestamps) {
         this->relatedTimestamps = std::move(relatedTimestamps);
+        this->frequencyAverage = config.isFrequencyAverage();
     }
     SummationHandler() = default;
 

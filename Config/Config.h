@@ -74,6 +74,11 @@ private:
      * Режим суммирования включен/отключен
      */
      bool summationEnabled;
+
+     /**
+      * Суммировать фурье-спектры отдельных частот или считать среднее
+      */
+      bool frequencyAverage;
 public:
     const std::string &getStartDate() const;
 
@@ -94,6 +99,8 @@ public:
     int getObservationLength() const;
 
     bool isSummationEnabled() const;
+
+    bool isFrequencyAverage() const;
 };
 
 

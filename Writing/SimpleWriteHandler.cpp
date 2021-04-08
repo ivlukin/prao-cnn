@@ -23,7 +23,11 @@ void SimpleWriteHandler::write() {
         for (const auto &raySummaryEntry: timestamp.getRayMap()) {
             int ray_num = raySummaryEntry.first + 1;
             Ray thisRay = raySummaryEntry.second;
-            std::vector<float> bandSummaryForThisRay = thisRay.getBandSummary();
+            std::vector<float> bandSummaryForThisRay;
+            if (frequencyAverage)
+                bandSummaryForThisRay = thisRay.getBandAverage();
+            else
+                bandSummaryForThisRay = thisRay.getBandSummary();
             std::string filePath = subDirPath + getSystemSeparator() + std::to_string(ray_num) + ".fou";
             writeToFile(filePath, ray_num, bandSummaryForThisRay);
         }
