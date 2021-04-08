@@ -84,7 +84,7 @@ std::string TimeCoordinateHandler::getFileNameFromDate(int year, int month, int 
     path += "_";
 
     ss = std::stringstream();
-    ss << std::setw(2) << std::setfill('0') << hour;
+    ss << std::setw(2) << std::setfill('0') << (hour + 1);
     s = ss.str();
     path += s;
 
