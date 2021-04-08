@@ -1,7 +1,7 @@
 
-#include "WriteHandler.h"
+#include "SummationWriteHandler.h"
 
-void WriteHandler::write() {
+void SummationWriteHandler::write() {
     time_t beginDateTime = to_SunTime(timeCoordinate.getBeginDateTime());
     tm *beginDateTimeTm = localtime(&beginDateTime);
     if (beginDateTimeTm->tm_year < 200) {
@@ -26,7 +26,7 @@ void WriteHandler::write() {
 }
 
 void
-WriteHandler::writeToFile(const std::string &filepath, int ray_num, const std::vector<double> &fourierResult) {
+SummationWriteHandler::writeToFile(const std::string &filepath, int ray_num, const std::vector<double> &fourierResult) {
 
     std::ofstream out(filepath);
     double tresolution = fourierResult.size() == (2048 / 2 + 1) ? 100 : 12.5;
@@ -51,7 +51,7 @@ WriteHandler::writeToFile(const std::string &filepath, int ray_num, const std::v
     fclose(f);
 }
 
-std::string WriteHandler::getDirPathFromTm(tm *dateTime) {
+std::string SummationWriteHandler::getDirPathFromTm(tm *dateTime) {
     std::string path;
 
     std::stringstream ss;
@@ -87,7 +87,7 @@ std::string WriteHandler::getDirPathFromTm(tm *dateTime) {
     return path;
 }
 
-std::string WriteHandler::getSystemSeparator() {
+std::string SummationWriteHandler::getSystemSeparator() {
 #ifdef _WIN32
     return "\\";
 #else

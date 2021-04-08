@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(OpenCL REQUIRED)
 find_package(clFFT CONFIG REQUIRED)
-add_executable(prao_fourier main.cpp
+add_executable(prao_cnn main.cpp
         Time/TimeCoordinate.cpp Time/TimeCoordinate.h
         Time/TimeCoordinate.cpp Time/TimeCoordinate.h
         Time/TimeUtils.cpp Time/TimeUtils.h
@@ -24,6 +24,6 @@ add_executable(prao_fourier main.cpp
         Reader/DataSeeker.h Reader/DataSeeker.cpp
         Celestial/Ray.cpp Celestial/Ray.h
         Celestial/Timestamp.h
-        Summarizing/SummarizeHandler.cpp
-        Summarizing/SummarizeHandler.h Writing/WriteHandler.cpp Writing/WriteHandler.h)
-target_link_libraries(prao_fourier OpenCL::OpenCL clFFT)
+        Summarizing/SummationHandler.cpp
+        Summarizing/SummationHandler.h Writing/SummationWriteHandler.cpp Writing/SummationWriteHandler.h Writing/SimpleWriteHandler.cpp Writing/SimpleWriteHandler.h)
+target_link_libraries(prao_cnn OpenCL::OpenCL clFFT)

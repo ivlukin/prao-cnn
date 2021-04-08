@@ -1,7 +1,7 @@
 
-#include "SummarizeHandler.h"
+#include "SummationHandler.h"
 
-void SummarizeHandler::calculateSummary() {
+void SummationHandler::calculateSummary() {
     int size = relatedTimestamps[0].getRayMap()[0].getBandSummary().size();
     summaryForEveryRayInTime = std::map<int, std::vector<double>>();
     for (int i = 0; i < 48; ++i) {

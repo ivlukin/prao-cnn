@@ -4,12 +4,13 @@
 #include "Time/TimeCoordinateHandler.h"
 #include "FileHandler//FileHandler.h"
 #include "FourierHandler/FourierHandler.h"
-#include "Summarizing/SummarizeHandler.h"
-#include "Writing/WriteHandler.h"
+#include "Summarizing/SummationHandler.h"
+#include "Writing/SummationWriteHandler.h"
+#include "Writing/SimpleWriteHandler.h"
 
 CalibrationDataStorage *readCalibrationDataStorage(const string &basicString);
 
-std::string tm_tostring(tm* datetime);
+std::string tm_tostring(tm *datetime);
 
 int main(int argc, char **argv) {
     std::vector<std::string> args;
@@ -36,23 +37,37 @@ int main(int argc, char **argv) {
     OpenCLContext context = OpenCLContext();
     context.initContext();
     std::cout << "reading calibration storage..." << std::endl;
-    CalibrationDataStorage* storage = readCalibrationDataStorage(config.getCalibrationListPath());
+    CalibrationDataStorage *storage = readCalibrationDataStorage(config.getCalibrationListPath());
     clock_t tStart = clock();
     TimeCoordinateHandler handler = TimeCoordinateHandler(config);
     std::cout << "generating time coordinates..." << std::endl;
     handler.generateTimeCoordinates();
-    for (const TimeCoordinate& coordinate: handler.getTimeCoordinateSet()) {
+    for (const TimeCoordinate &coordinate: handler.getTimeCoordinateSet()) {
         time_t sunTime = to_SunTime(coordinate.getBeginDateTime());
         std::cout << "processing msk_time: " << tm_tostring(localtime(&sunTime)) << std::endl;
         const std::vector<double> &coordinatesWithSameStarTime = coordinate.getTimeCoordinatesWithSameStarTime();
         FileHandler fileHandler = FileHandler(coordinatesWithSameStarTime, config);
         fileHandler.calculateRelatedFiles();
-        FourierHandler fourierHandler = FourierHandler(fileHandler.getFileNameToTimestampsMap(), context, config.getDurationStarSeconds());
+        FourierHandler fourierHandler = FourierHandler(fileHandler.getFileNameToTimestampsMap(), context,
+                                                       config.getDurationStarSeconds());
         fourierHandler.setStorage(storage);
         fourierHandler.run();
-        SummarizeHandler summarizeHandler = SummarizeHandler(fourierHandler.getCalculatedData());
-        WriteHandler writeHandler = WriteHandler(config, summarizeHandler.getSummaryForEveryRayInTime(), coordinate);
-        writeHandler.write();
+        /***
+         * also TODO
+         * проверить рваное считывание, когда искомые данные лежат на границе файла (либо их вообще выпилить нахер)
+         * also TODO
+         * написать уже наконец нормальную калибровку
+         */
+        if (config.isSummationEnabled()) {
+            SummationHandler summarizeHandler = SummationHandler(fourierHandler.getCalculatedData());
+            SummationWriteHandler writeHandler = SummationWriteHandler(config,
+                                                                       summarizeHandler.getSummaryForEveryRayInTime(),
+                                                                       coordinate);
+            writeHandler.write();
+        } else {
+            SimpleWriteHandler simpleWriteHandler = SimpleWriteHandler(config, fourierHandler.getCalculatedData(), coordinate);
+            simpleWriteHandler.write();
+        }
     }
     clReleaseCommandQueue(context.getClCommandQueue());
     clReleaseContext(context.getContext());
@@ -73,6 +88,7 @@ CalibrationDataStorage *readCalibrationDataStorage(const string &path_calibratio
     return storage;
 }
 
-std::string tm_tostring(tm* datetime) {
-    return std::to_string(datetime->tm_hour) + ":" + std::to_string(datetime->tm_min) + ":" + std::to_string(datetime->tm_sec);
+std::string tm_tostring(tm *datetime) {
+    return std::to_string(datetime->tm_hour) + ":" + std::to_string(datetime->tm_min) + ":" +
+           std::to_string(datetime->tm_sec);
 }

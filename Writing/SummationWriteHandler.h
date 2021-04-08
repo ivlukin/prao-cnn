@@ -14,7 +14,7 @@
 #include <iomanip>
 #include <sys/stat.h>
 
-class WriteHandler {
+class SummationWriteHandler {
 private:
     std::string outputPath;
     TimeCoordinate timeCoordinate;
@@ -23,8 +23,8 @@ private:
     std::string getDirPathFromTm(tm* dateTime);
     std::string getSystemSeparator();
 public:
-    WriteHandler() = default;
-    WriteHandler(const Config& config, std::map<int, std::vector<double>> raysAndSummary , TimeCoordinate timeCoordinate) {
+    SummationWriteHandler() = default;
+    SummationWriteHandler(const Config& config, std::map<int, std::vector<double>> raysAndSummary , TimeCoordinate timeCoordinate) {
         this->raysAndSummary = std::move(raysAndSummary);
         this->outputPath = config.getOutputPath();
         this->timeCoordinate = std::move(timeCoordinate);

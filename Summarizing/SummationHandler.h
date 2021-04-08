@@ -7,16 +7,16 @@
 #include <vector>
 #include "../Celestial/Timestamp.h"
 
-class SummarizeHandler {
+class SummationHandler {
 private:
     std::vector<Timestamp> relatedTimestamps;
     std::map<int, std::vector<double>> summaryForEveryRayInTime;
     bool isCalculated = false;
 public:
-    explicit SummarizeHandler(std::vector<Timestamp> relatedTimestamps) {
+    explicit SummationHandler(std::vector<Timestamp> relatedTimestamps) {
         this->relatedTimestamps = std::move(relatedTimestamps);
     }
-    SummarizeHandler() = default;
+    SummationHandler() = default;
 
     std::map<int, std::vector<double>> &getSummaryForEveryRayInTime() {
         if (!isCalculated)

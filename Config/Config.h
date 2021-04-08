@@ -69,11 +69,13 @@ private:
      * Длина отрезка данных для преобразования Фурье (в звездных секундах)
      */
     double durationStarSeconds;
+
+    /**
+     * Режим суммирования включен/отключен
+     */
+     bool summationEnabled;
 public:
     const std::string &getStartDate() const;
-
-    const std::string &getEndDate() const;
-
 
     const std::string &getRange() const;
 
@@ -90,6 +92,8 @@ public:
     double getDurationStarSeconds() const;
 
     int getObservationLength() const;
+
+    bool isSummationEnabled() const;
 };
 
 
