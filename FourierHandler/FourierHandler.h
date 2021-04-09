@@ -14,6 +14,8 @@
 #include "../Celestial/Ray.h"
 #include <cmath>
 #include "../Celestial/Timestamp.h"
+#include <iomanip>
+#include "../Utils/Utils.h"
 
 class FourierHandler {
 private:

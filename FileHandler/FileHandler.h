@@ -18,6 +18,7 @@
 #include <utility>
 #include <iostream>
 #include <fstream>
+#include "../Utils/Utils.h"
 
 class FileHandler {
 private:
@@ -28,7 +29,7 @@ private:
     std::string fileListPath;
     std::vector<double> timeCoordinatesEpoch;
 
-    std::map<FilesListItem, std::vector<tm*>> fileItemToTimestampsMap;
+    std::map<FilesListItem, std::vector<tm *>> fileItemToTimestampsMap;
 private:
     std::string getFileNameFromDate(int year, int month, int day, int hour);
 

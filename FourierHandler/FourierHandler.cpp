@@ -1,6 +1,7 @@
 
-#include <iomanip>
+
 #include "FourierHandler.h"
+
 
 
 int FourierHandler::run() {
@@ -39,8 +40,8 @@ int FourierHandler::run() {
                                 readData);
                         // считываем из нового файла
                         std::cout << "reading " << tail << " seconds from another file: "
-                                  << calculateNextFileName(item.filepath) << std::endl;
-                        auto *anotherSeeker = new DataSeeker(calculateNextFileName(item.filepath));
+                                  << Utils::getNextFileFromFileName(item.filepath) << std::endl;
+                        auto *anotherSeeker = new DataSeeker(Utils::getNextFileFromFileName(item.filepath));
                         anotherSeeker->setCalibrationData(this->storage);
                         // очень важно, что timeElapsedInSeconds = 0
                         std::vector<float> dataFromAnotherFile = seeker->seek(_ray, band, 0, size);
@@ -80,66 +81,4 @@ int FourierHandler::run() {
 
 void FourierHandler::setStorage(CalibrationDataStorage *storage) {
     FourierHandler::storage = storage;
-}
-
-std::string FourierHandler::calculateNextFileName(std::string filepath) {
-//system separator should be here
-    std::string absolutePath = filepath.substr(0, filepath.find_last_of("//") + 1);
-    std::string currentFileName = filepath.substr(filepath.find_last_of("//") + 1);
-    vector<string> tokens = split(currentFileName, "_");
-    string extension = tokens[3].substr(tokens[3].find_last_of('.'));
-    string mode = tokens[2];
-    string hour = tokens[1];
-    string currentDateWithoutTime = tokens[0];
-    currentDateWithoutTime += " " + hour + ":00:00";
-    tm *dateTime = new tm();
-    std::istringstream ss(currentDateWithoutTime);
-    if (ss >> get_time(dateTime, "%d%m%y %H:%M:%S")) {
-        std::put_time(dateTime, "%c");
-    }
-    dateTime->tm_hour += 1;
-    mktime(dateTime);
-    std::string result = absolutePath + getFileNameFromDate(dateTime->tm_year, dateTime->tm_mon + 1, dateTime->tm_mday,
-                                                            dateTime->tm_hour, mode, extension);
-    delete dateTime;
-    return result;
-}
-
-std::vector<string> FourierHandler::split(const string &str, const string &delim) {
-    std::vector<string> tokens;
-    size_t prev = 0, pos = 0;
-    do {
-        pos = str.find(delim, prev);
-        if (pos == string::npos) pos = str.length();
-        string token = str.substr(prev, pos - prev);
-        if (!token.empty()) tokens.push_back(token);
-        prev = pos + delim.length();
-    } while (pos < str.length() && prev < str.length());
-    return tokens;
-}
-
-std::string FourierHandler::getFileNameFromDate(int year, int month, int day, int hour, string range, string mode) {
-    std::string path;
-
-    std::stringstream ss;
-    ss << std::setw(2) << std::setfill('0') << day;
-    std::string s = ss.str();
-    path += s;
-
-    ss = std::stringstream();
-    ss << std::setw(2) << std::setfill('0') << month;
-    s = ss.str();
-    path += s;
-
-    path += std::to_string(year);
-    path += "_";
-
-    ss = std::stringstream();
-    ss << std::setw(2) << std::setfill('0') << hour;
-    s = ss.str();
-    path += s;
-
-    path += "_" + range + "_00" + mode;
-
-    return path;
 }

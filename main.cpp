@@ -45,9 +45,7 @@ int main(int argc, char **argv) {
     handler.generateTimeCoordinates();
     for (const TimeCoordinate &coordinate: handler.getTimeCoordinateSet()) {
         time_t sunTime = to_SunTime(coordinate.getBeginDateTime());
-        time_t starTime = coordinate.getBeginDateTime();
         std::cout << "processing msk_time: " << tm_tostring(localtime(&sunTime)) << std::endl;
-        std::cout << "processing star_time: " << tm_tostring(localtime(&starTime)) << std::endl;
         const std::vector<double> &coordinatesWithSameStarTime = coordinate.getTimeCoordinatesWithSameStarTime();
         FileHandler fileHandler = FileHandler(coordinatesWithSameStarTime, config);
         fileHandler.calculateRelatedFiles();
@@ -62,8 +60,6 @@ int main(int argc, char **argv) {
          * проверить что в DataSeeker правильно считываются данные
          * also TODO
          * понять почему разрыв между файлами происходит в середине часа
-         * also TODO
-         * и еще кажется изначально считывание начинается не с того файла
          */
 
         if (config.isSummationEnabled()) {

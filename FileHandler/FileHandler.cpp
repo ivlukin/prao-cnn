@@ -2,6 +2,7 @@
 #include "FileHandler.h"
 
 
+
 FileHandler::FileHandler(const std::vector<double> &timeCoordinates, const Config &config) {
     this->mode = config.getMode();
     this->range = config.getRange();
@@ -9,43 +10,20 @@ FileHandler::FileHandler(const std::vector<double> &timeCoordinates, const Confi
     this->timeCoordinatesEpoch = timeCoordinates;
 }
 
-std::string FileHandler::getFileNameFromDate(int year, int month, int day, int hour) {
-    std::string path;
-
-    std::stringstream ss;
-    ss << std::setw(2) << std::setfill('0') << day;
-    std::string s = ss.str();
-    path += s;
-
-    ss = std::stringstream();
-    ss << std::setw(2) << std::setfill('0') << month;
-    s = ss.str();
-    path += s;
-
-    path += std::to_string(year).substr(2);
-    path += "_";
-
-    ss = std::stringstream();
-    ss << std::setw(2) << std::setfill('0') << hour;
-    s = ss.str();
-    path += s;
-
-    path += "_" + range + "_00" + mode;
-
-    return path;
-}
 
 void FileHandler::processFilesItemsList() {
     std::vector<FilesListItem> fileItems = std::vector<FilesListItem>();
     std::vector<std::string> fileNameList = std::vector<std::string>();
     // сначала сгруппируем таймштампы по принципу имя_файла -> соответствующие таймштампы
-    std::map<std::string, std::vector<tm*>> fileNameToTimestampsList = std::map<std::string, std::vector<tm*>>();
+    std::map<std::string, std::vector<tm *>> fileNameToTimestampsList = std::map<std::string, std::vector<tm *>>();
     for (tm *time: this->timeCoordinates) {
-        std::string fileNameFromDate = getFileNameFromDate(time->tm_year, time->tm_mon, time->tm_mday, time->tm_hour);
+        // мы уже сделали month + 1, здесь нужно вычесть
+        std::string fileNameFromDate = Utils::getFileFromDate(time->tm_year, time->tm_mon - 1, time->tm_mday, time->tm_hour,
+                                                              range, mode);
         fileNameList.push_back(fileNameFromDate);
         if (fileNameToTimestampsList.find(fileNameFromDate) == fileNameToTimestampsList.end()) {
             fileNameToTimestampsList.insert(std::pair<std::string,
-                                            std::vector<tm*>>(fileNameFromDate, std::vector<tm*>()));
+                    std::vector<tm *>>(fileNameFromDate, std::vector<tm *>()));
         }
         fileNameToTimestampsList[fileNameFromDate].push_back(time);
     }
@@ -64,9 +42,9 @@ void FileHandler::processFilesItemsList() {
 
     // затем просто смапим соответствующие файлайтемы на таймштмпы
     fileItemToTimestampsMap = std::map<FilesListItem, std::vector<tm *>>();
-    for (const FilesListItem& item: fileItems) {
+    for (const FilesListItem &item: fileItems) {
         fileItemToTimestampsMap.insert(std::pair<FilesListItem,
-                                       std::vector<tm *>>(item, fileNameToTimestampsList[item.filename]));
+                std::vector<tm *>>(item, fileNameToTimestampsList[item.filename]));
     }
 }
 

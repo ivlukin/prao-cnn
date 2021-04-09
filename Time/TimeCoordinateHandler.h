@@ -14,10 +14,11 @@
 #include <vector>
 #include "TimeUtils.h"
 #include "../Reader/FilesListItem.h"
+#include "../Utils/Utils.h"
 
 class TimeCoordinateHandler {
 private:
-    tm startDate{};
+    tm startDateSun{};
     int observationLength;
     int step;
     std::vector<TimeCoordinate> timeCoordinateSet;
@@ -30,8 +31,6 @@ private:
     tm getDateTimeFromString(const std::string &dateTimeAsString);
 
     bool scanForFileItem(const std::string& fileName);
-
-    std::string getFileNameFromDate(int year, int month, int day, int hour);
 
 public:
     explicit TimeCoordinateHandler(const Config &config);
