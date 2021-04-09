@@ -5,6 +5,7 @@
 
 #include "SimpleWriteHandler.h"
 
+
 void SimpleWriteHandler::write() {
     time_t beginDateTime = to_SunTime(timeCoordinate.getBeginDateTime());
     tm *beginDateTimeTm = localtime(&beginDateTime);
@@ -13,13 +14,13 @@ void SimpleWriteHandler::write() {
         beginDateTimeTm->tm_mon += 1;
     }
     std::string dirPath = getDirPathFromTm(beginDateTimeTm);
-    std::string totalDirPath = outputPath + getSystemSeparator() + dirPath;
+    std::string totalDirPath = outputPath + Utils::getSystemSeparator() + dirPath;
 
-    createDirectory(totalDirPath);
+    Utils::createDirectory(totalDirPath);
     for (Timestamp timestamp: calculatedData) {
-        std::string subDirPath = totalDirPath + getSystemSeparator() +
+        std::string subDirPath = totalDirPath + Utils::getSystemSeparator() +
                                  getDirPathFromTm(timestamp.getTimestamp());
-        createDirectory(subDirPath);
+        Utils::createDirectory(subDirPath);
         for (const auto &raySummaryEntry: timestamp.getRayMap()) {
             int ray_num = raySummaryEntry.first + 1;
             Ray thisRay = raySummaryEntry.second;
@@ -28,7 +29,7 @@ void SimpleWriteHandler::write() {
                 bandSummaryForThisRay = thisRay.getBandAverage();
             else
                 bandSummaryForThisRay = thisRay.getBandSummary();
-            std::string filePath = subDirPath + getSystemSeparator() + std::to_string(ray_num) + ".fou";
+            std::string filePath = subDirPath + Utils::getSystemSeparator() + std::to_string(ray_num) + ".fou";
             writeToFile(filePath, ray_num, bandSummaryForThisRay);
         }
     }
@@ -70,13 +71,6 @@ std::string SimpleWriteHandler::getDirPathFromTm(tm *dateTime) {
     return path;
 }
 
-std::string SimpleWriteHandler::getSystemSeparator() {
-#ifdef _WIN32
-    return "\\";
-#else
-    return "/";
-#endif
-}
 
 void
 SimpleWriteHandler::writeToFile(const std::string &filepath, int ray_num, const std::vector<float> &fourierResult) {
@@ -98,12 +92,4 @@ SimpleWriteHandler::writeToFile(const std::string &filepath, int ray_num, const 
     fwrite(&fourierResult[0], sizeof(std::vector<float>::value_type), resultSize, f);
 
     fclose(f);
-}
-
-void SimpleWriteHandler::createDirectory(const std::string &dirPath) {
-#ifdef _WIN32
-    CreateDirectory(dirPath.c_str(), nullptr);
-#else
-    mkdir(dirPath.c_str(), 0777);
-#endif
 }

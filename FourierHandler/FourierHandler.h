@@ -19,10 +19,22 @@ class FourierHandler {
 private:
     double duration;
     std::map<FilesListItem, std::vector<tm*>> fileItemToTimestampsMap;
-private:
     OpenCLContext context;
     std::vector<Timestamp> calculatedData;
     CalibrationDataStorage *storage;
+
+    /**
+     * Поскольку возможна ситуация, когда нужный отрезок лежит на границе файла
+     * и часть данных нужно считать с одного файла, а часть с - другого
+     * нужен метод, высчитывающий имя следующего файла
+     * (вообще то это костыль)
+     * @param filepath - имя первого файла
+     * @return - путь к следующему файлу
+     */
+    std::string calculateNextFileName(std::string filepath);
+    std::vector<string> split(const string &str, const string &delim);
+    std::string getFileNameFromDate(int year, int month, int day, int hour, string range, string mode);
+
 public:
     FourierHandler() = default;
 

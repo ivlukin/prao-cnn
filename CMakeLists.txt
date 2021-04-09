@@ -25,5 +25,7 @@ add_executable(prao_cnn main.cpp
         Celestial/Ray.cpp Celestial/Ray.h
         Celestial/Timestamp.h
         Summarizing/SummationHandler.cpp
-        Summarizing/SummationHandler.h Writing/SummationWriteHandler.cpp Writing/SummationWriteHandler.h Writing/SimpleWriteHandler.cpp Writing/SimpleWriteHandler.h)
+        Summarizing/SummationHandler.h Writing/SummationWriteHandler.cpp
+        Writing/SummationWriteHandler.h Writing/SimpleWriteHandler.cpp
+        Writing/SimpleWriteHandler.h Utils/Utils.cpp Utils/Utils.h)
 target_link_libraries(prao_cnn OpenCL::OpenCL clFFT)

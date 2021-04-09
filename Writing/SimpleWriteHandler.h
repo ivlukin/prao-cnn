@@ -16,6 +16,7 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include "../Utils/Utils.h"
 
 class SimpleWriteHandler {
 private:
@@ -25,8 +26,6 @@ private:
 
     std::string getDirPathFromTm(tm *dateTime);
 
-    std::string getSystemSeparator();
-    void createDirectory(const std::string& dirPath);
     bool frequencyAverage;
 
 public:

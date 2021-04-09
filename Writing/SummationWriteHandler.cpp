@@ -9,18 +9,13 @@ void SummationWriteHandler::write() {
         beginDateTimeTm->tm_mon += 1;
     }
     std::string dirPath = getDirPathFromTm(beginDateTimeTm);
-    std::string totalDirPath = outputPath + getSystemSeparator() + dirPath;
-
-#ifdef _WIN32
-    CreateDirectory(outputDirectoryForExactFile, nullptr);
-#else
-    mkdir(totalDirPath.c_str(), 0777);
-#endif
+    std::string totalDirPath = outputPath + Utils::getSystemSeparator() + dirPath;
+    Utils::createDirectory(totalDirPath);
 
     for (auto &rayAndSummary: raysAndSummary) {
         int ray_num = rayAndSummary.first + 1;
         std::vector<double> data = rayAndSummary.second;
-        std::string filePath = totalDirPath + getSystemSeparator() + std::to_string(ray_num) + ".fou";
+        std::string filePath = totalDirPath + Utils::getSystemSeparator() + std::to_string(ray_num) + ".fou";
         writeToFile(filePath, ray_num, data);
     }
 }
@@ -85,12 +80,4 @@ std::string SummationWriteHandler::getDirPathFromTm(tm *dateTime) {
     path += s;
 
     return path;
-}
-
-std::string SummationWriteHandler::getSystemSeparator() {
-#ifdef _WIN32
-    return "\\";
-#else
-    return "/";
-#endif
 }

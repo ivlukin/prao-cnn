@@ -33,8 +33,14 @@ void TimeCoordinateHandler::generateTimeCoordinates() {
     int mday = startDate.tm_mday;
     int hour = startDate.tm_hour;
 
-
-    std::string searchingFile = getFileNameFromDate(year, month, mday, hour);
+    /**
+     * ВНИМАНИЕ!!!
+     * здесь просто выставляется hour + 1, потому что в имени файла выставляется время конца наблюдения
+     * работать это корректно будет когда нет сложных вычислений дат, т.е. перехода через день, месяц и тд
+     * т.е. в идеале выставлять полночь какого-нибудь дня
+     * TODO написать нормальный калькулятор дат
+     */
+    std::string searchingFile = getFileNameFromDate(year, month, mday, hour + 1);
     bool found = scanForFileItem(searchingFile);
     if (!found) {
         throw std::logic_error("couldn't find entry in fileListPath of startDate");
@@ -84,7 +90,7 @@ std::string TimeCoordinateHandler::getFileNameFromDate(int year, int month, int 
     path += "_";
 
     ss = std::stringstream();
-    ss << std::setw(2) << std::setfill('0') << (hour + 1);
+    ss << std::setw(2) << std::setfill('0') << hour;
     s = ss.str();
     path += s;
 

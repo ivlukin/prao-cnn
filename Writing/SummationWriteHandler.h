@@ -13,6 +13,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sys/stat.h>
+#include "../Utils/Utils.h"
 
 class SummationWriteHandler {
 private:
@@ -21,7 +22,6 @@ private:
     std::map<int, std::vector<double>> raysAndSummary;
     void writeToFile(const std::string& filepath, int ray_num, const std::vector<double>& fourierResult);
     std::string getDirPathFromTm(tm* dateTime);
-    std::string getSystemSeparator();
     bool frequencyAverage;
 public:
     SummationWriteHandler() = default;
