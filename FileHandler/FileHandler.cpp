@@ -17,8 +17,7 @@ void FileHandler::processFilesItemsList() {
     // сначала сгруппируем таймштампы по принципу имя_файла -> соответствующие таймштампы
     std::map<std::string, std::vector<tm *>> fileNameToTimestampsList = std::map<std::string, std::vector<tm *>>();
     for (tm *time: this->timeCoordinates) {
-        // мы уже сделали month + 1, здесь нужно вычесть
-        std::string fileNameFromDate = Utils::getFileFromDate(time->tm_year, time->tm_mon - 1, time->tm_mday, time->tm_hour,
+        std::string fileNameFromDate = Utils::getFileFromDate(time->tm_year, time->tm_mon, time->tm_mday, time->tm_hour,
                                                               range, mode);
         fileNameList.push_back(fileNameFromDate);
         if (fileNameToTimestampsList.find(fileNameFromDate) == fileNameToTimestampsList.end()) {
@@ -56,7 +55,6 @@ void FileHandler::calculateRelatedFiles() {
         tm *starTimeStruct = localtime(&sunTimeAsInt);
         if (starTimeStruct->tm_year < 200) {
             starTimeStruct->tm_year += 1900;
-            starTimeStruct->tm_mon += 1;
         }
         this->timeCoordinates.push_back(tmDeepCopy(starTimeStruct));
     }

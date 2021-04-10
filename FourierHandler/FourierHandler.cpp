@@ -14,8 +14,7 @@ int FourierHandler::run() {
         seeker->setCalibrationData(this->storage);
         int size = item.nbands == 33 ? 2048 * 8 : 2048; // сейчас захардкожено, вообще надо из duration считать
         for (tm *timestamp: timeStamps) {
-            time_t epochSecondsStarTime = mktime(timestamp);
-            time_t epochSecondsSunTime = to_SunTime(epochSecondsStarTime);
+            time_t epochSecondsSunTime = mktime(timestamp);
             time_t timeElapsedFromHourBegin = epochSecondsSunTime % (60 * 60);
             Timestamp skyTimestamp = Timestamp(timestamp);
             for (int _ray = 0; _ray < 48; _ray++) {

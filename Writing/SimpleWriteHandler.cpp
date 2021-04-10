@@ -11,7 +11,6 @@ void SimpleWriteHandler::write() {
     tm *beginDateTimeTm = localtime(&beginDateTime);
     if (beginDateTimeTm->tm_year < 200) {
         beginDateTimeTm->tm_year += 1900;
-        beginDateTimeTm->tm_mon += 1;
     }
     std::string dirPath = getDirPathFromTm(beginDateTimeTm);
     std::string totalDirPath = outputPath + Utils::getSystemSeparator() + dirPath;
@@ -44,7 +43,7 @@ std::string SimpleWriteHandler::getDirPathFromTm(tm *dateTime) {
     path += s;
 
     ss = std::stringstream();
-    ss << std::setw(2) << std::setfill('0') << dateTime->tm_mon;
+    ss << std::setw(2) << std::setfill('0') << dateTime->tm_mon + 1;
     s = ss.str();
     path += s;
 

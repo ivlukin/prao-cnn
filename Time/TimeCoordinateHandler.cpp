@@ -25,6 +25,11 @@ std::tm TimeCoordinateHandler::getDateTimeFromString(const std::string &dateTime
 
 void TimeCoordinateHandler::generateTimeCoordinates() {
     // all time coordinates will be stored epoch time (and timezone doesn't matter)
+    /**
+     * В конфиге у нас указано время в МСК
+     * но поскольку небесные объекты появляются в одном и то же месте в ЗВЕЗДНОЕ время
+     * необходимо вести работу именно в звездном времени
+     */
     int year = startDateSun.tm_year;
     int month = startDateSun.tm_mon;
     if (year < 200) {
@@ -39,13 +44,13 @@ void TimeCoordinateHandler::generateTimeCoordinates() {
         throw std::logic_error("couldn't find entry in fileListPath of startDate");
     }
 
-    double startDateTimeLocal = to_starTime(mktime(&this->startDateSun));
-    startDateTimeLocal += firstFile.star_time_start;
+    double startDateTime_StarTime = to_starTime(mktime(&this->startDateSun));
+    //startDateTime_StarTime += firstFile.star_time_start;
     int numIterations = (int) (to_SunTime(3600 * 24) / this->step);
     for (int i = 0; i < numIterations; ++i) {
-        TimeCoordinate timeCoordinate = TimeCoordinate(startDateTimeLocal, observationLength);
+        TimeCoordinate timeCoordinate = TimeCoordinate(startDateTime_StarTime, observationLength);
         timeCoordinateSet.push_back(timeCoordinate);
-        startDateTimeLocal += this->step;
+        startDateTime_StarTime += this->step;
     }
 
 }

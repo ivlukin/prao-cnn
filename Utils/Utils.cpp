@@ -87,6 +87,8 @@ std::string Utils::calculateFileName(int year, int month, int day, int hour, std
     s = ss.str();
     path += s;
 
+    if (year < 200)
+        year += 1900;
     path += std::to_string(year).substr(2);
     path += "_";
 
