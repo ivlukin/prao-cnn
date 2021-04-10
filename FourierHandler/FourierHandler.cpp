@@ -20,7 +20,8 @@ int FourierHandler::run() {
             for (int _ray = 0; _ray < 48; _ray++) {
                 Ray ray = Ray(_ray + 1);
                 std::map<int, std::vector<float>> bandMap;
-                for (int band = 0; band < item.nbands; ++band) {
+                // суммирующий band не нужен
+                for (int band = 0; band < item.nbands - 1; ++band) {
                     std::vector<float> readData;
                     // проверка на перескок через файл
                     if (timeElapsedFromHourBegin + this->duration <= 3600) {
