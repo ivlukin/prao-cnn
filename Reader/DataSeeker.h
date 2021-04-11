@@ -27,7 +27,8 @@ public:
             throw std::logic_error("error opening data file: " + filename);
         }
         in >> dataHeader;
-        dataHeader.nbands++;
+        // в файле есть суммирующий band, который не прописывается явно в метаинформации файла
+        dataHeader.nbands = dataHeader.nbands + 1;
         floats_per_point = dataHeader.nbands * 48;
         header_length = in.tellg();
         in.close();

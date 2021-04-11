@@ -5,7 +5,7 @@ std::vector<float> DataSeeker::seek(int ray, int band, int timeElapsedInSeconds,
     std::ifstream filestream(filename, std::ios::in | std::ios::binary);
     std::vector<float> read_data = std::vector<float>();
     long long elapsedPoints = (int) (timeElapsedInSeconds / dataHeader.tresolution);
-    long caret =
+    long long caret =
             (long) (dataHeader.nrays * dataHeader.nbands * sizeof(float) * elapsedPoints)
             + this->header_length +
             (long) (ray * dataHeader.nbands * sizeof(float)) + band * sizeof(float);
@@ -17,7 +17,7 @@ std::vector<float> DataSeeker::seek(int ray, int band, int timeElapsedInSeconds,
         filestream.read(buffer, sizeof(float));
         float signal = ((float *) buffer)[0];
         read_data.push_back(signal);
-        filestream.seekg(dataHeader.nrays * dataHeader.nrays * sizeof(float), std::ifstream::cur);
+        filestream.seekg(dataHeader.nrays * dataHeader.nbands * sizeof(float), std::ifstream::cur);
     }
     count_point_position = filestream.tellg();
     delete[] buffer;

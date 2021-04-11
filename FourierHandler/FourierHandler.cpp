@@ -12,7 +12,7 @@ int FourierHandler::run() {
         auto *seeker = new DataSeeker(item.filepath);
         std::cout << "reading from file: " << item.filepath << std::endl;
         seeker->setCalibrationData(this->storage);
-        int size = item.nbands == 33 ? 2048 * 8 : 2048; // сейчас захардкожено, вообще надо из duration считать
+        int size = seeker->getHeader().nbands == 33 ? 2048 * 8 : 2048; // сейчас захардкожено, вообще надо из duration считать
         for (tm *timestamp: timeStamps) {
             time_t epochSecondsSunTime = mktime(timestamp);
             time_t timeElapsedFromHourBegin = epochSecondsSunTime % (60 * 60);
@@ -21,7 +21,7 @@ int FourierHandler::run() {
                 Ray ray = Ray(_ray + 1);
                 std::map<int, std::vector<float>> bandMap;
                 // суммирующий band не нужен
-                for (int band = 0; band < item.nbands - 1; ++band) {
+                for (int band = 0; band < seeker->getHeader().nbands - 1; ++band) {
                     std::vector<float> readData;
                     // проверка на перескок через файл
                     if (timeElapsedFromHourBegin + this->duration <= 3600) {
