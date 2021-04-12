@@ -53,12 +53,6 @@ int main(int argc, char **argv) {
                                                        config.getDurationStarSeconds());
         fourierHandler.setStorage(storage);
         fourierHandler.run();
-        /***
-         * also TODO
-         * написать уже наконец нормальную калибровку
-         * also TODO
-         * проверить что в DataSeeker правильно считываются данные
-         */
 
         if (config.isSummationEnabled()) {
             SummationHandler summarizeHandler = SummationHandler(config, fourierHandler.getCalculatedData());

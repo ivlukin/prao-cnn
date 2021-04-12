@@ -24,7 +24,7 @@ int FourierHandler::run() {
                 for (int band = 0; band < seeker->getHeader().nbands - 1; ++band) {
                     std::vector<float> readData;
                     // проверка на перескок через файл
-                    if (timeElapsedFromHourBegin + this->duration <= 3600) {
+                    if (timeElapsedFromHourBegin + to_SunTime(this->duration) <= 3600) {
                         // здесь перескока нет, все ок
                         readData = seeker->seek(_ray, band, timeElapsedFromHourBegin, size);
                     } else {

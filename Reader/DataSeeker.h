@@ -29,7 +29,6 @@ public:
         in >> dataHeader;
         // в файле есть суммирующий band, который не прописывается явно в метаинформации файла
         dataHeader.nbands = dataHeader.nbands + 1;
-        floats_per_point = dataHeader.nbands * 48;
         header_length = in.tellg();
         in.close();
     }
@@ -47,7 +46,7 @@ public:
 
     void setCalibrationData(CalibrationDataStorage *_calibrationData) {
         DataSeeker::calibrationData = _calibrationData;
-        updateCalibrationData();
+        //updateCalibrationData();
     }
 
 private:
@@ -55,23 +54,8 @@ private:
     int header_length{};
     DataHeader dataHeader{};
     std::string filename;
-    CalibrationDataStorage* calibrationData;
-    int count_point_position {};
-    int floats_per_point {};
-    double* calibration_on_k = nullptr;
-    double* on_k_step = nullptr;
-    double* calibration_zr = nullptr;
-    double* zr_step = nullptr;
-    std::vector<float> data;
-
-private:
-    void updateCalibrationData();
-
-
-    void realloc(double *&base, const double *from);
-
-
-    void calibrateArrayPoints(int coordinate);
+    CalibrationDataStorage *calibrationData;
+    int count_point_position{};
 };
 
 
