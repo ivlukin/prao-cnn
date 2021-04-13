@@ -1,11 +1,14 @@
 
 
+
 #include "TimeCoordinate.h"
 
 void TimeCoordinate::generateStarTimes(double beginStarTime, int observationLength) {
     timeCoordinatesWithSameStarTime = std::vector<double>();
     double currentStarTime = beginStarTime;
-    double starTimeStep = to_SunTime(24 * 3600);
+    // во избежание двойной конверсии, здесь используются звездное время,
+    // в солнечное время переводится уже при считывании
+    double starTimeStep = 24 * 3600;
     for (int i = 0; i < observationLength; ++i) {
         timeCoordinatesWithSameStarTime.push_back(currentStarTime);
         currentStarTime += starTimeStep;

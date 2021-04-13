@@ -79,6 +79,14 @@ private:
       * Суммировать фурье-спектры отдельных частот или считать среднее
       */
       bool frequencyAverage;
+
+      /**
+       * Очень хитрый параметр.
+       * если указан, то берутся даты [startDate; endDate] и для них считаются observationLength соответствующих дат
+       * с шагом в одни звездные сутки
+       * необязательный параметр
+       */
+       std::string endDate;
 public:
     const std::string &getStartDate() const;
 
@@ -101,6 +109,8 @@ public:
     bool isSummationEnabled() const;
 
     bool isFrequencyAverage() const;
+
+    const std::string &getEndDate() const;
 };
 
 

@@ -3,9 +3,12 @@
 #include "TimeCoordinateHandler.h"
 
 
-
 TimeCoordinateHandler::TimeCoordinateHandler(const Config &config) {
     this->startDateSun = getDateTimeFromString(config.getStartDate());
+    if (!config.getEndDate().empty()) {
+        this->endDateSun = getDateTimeFromString(config.getEndDate());
+        this->hasEndDate = true;
+    }
     this->observationLength = config.getObservationLength();
     this->step = config.getStep();
     this->fileListPath = config.getFileListPath();
@@ -45,8 +48,14 @@ void TimeCoordinateHandler::generateTimeCoordinates() {
     }
 
     double startDateTime_StarTime = to_starTime(mktime(&this->startDateSun));
-    //startDateTime_StarTime += firstFile.star_time_start;
-    int numIterations = (int) (to_SunTime(3600 * 24) / this->step);
+    int numIterations;
+    if (hasEndDate) {
+        double endDateTime_EndDate = to_starTime(mktime(&this->endDateSun));
+        numIterations = (int)(to_SunTime(endDateTime_EndDate - startDateTime_StarTime) / this->step) + 1;
+    } else {
+        //startDateTime_StarTime += firstFile.star_time_start;
+        numIterations = (int) (to_SunTime(3600 * 24) / this->step);
+    }
     for (int i = 0; i < numIterations; ++i) {
         TimeCoordinate timeCoordinate = TimeCoordinate(startDateTime_StarTime, observationLength);
         timeCoordinateSet.push_back(timeCoordinate);

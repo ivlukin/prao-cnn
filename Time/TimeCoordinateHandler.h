@@ -19,6 +19,7 @@
 class TimeCoordinateHandler {
 private:
     tm startDateSun{};
+    tm endDateSun{};
     int observationLength;
     int step;
     std::vector<TimeCoordinate> timeCoordinateSet;
@@ -26,6 +27,7 @@ private:
     std::string fileListPath;
     std::string range;
     std::string mode;
+    bool hasEndDate = false;
 
 private:
     tm getDateTimeFromString(const std::string &dateTimeAsString);

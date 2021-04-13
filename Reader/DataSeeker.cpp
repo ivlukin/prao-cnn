@@ -6,7 +6,7 @@ std::vector<float> DataSeeker::seek(int ray, int band, int timeElapsedInSeconds,
     std::vector<float> read_data = std::vector<float>();
     long long elapsedPoints = (int) (timeElapsedInSeconds / dataHeader.tresolution);
     long long caret =
-            (long) (dataHeader.nrays * dataHeader.nbands * sizeof(float) * elapsedPoints)
+            (long long) (dataHeader.nrays * dataHeader.nbands * sizeof(float) * elapsedPoints)
             + this->header_length +
             (long) (ray * dataHeader.nbands * sizeof(float)) + band * sizeof(float);
 
@@ -25,7 +25,7 @@ std::vector<float> DataSeeker::seek(int ray, int band, int timeElapsedInSeconds,
     double beginPointMJD = dataHeader.MJD_begin + ((float) timeElapsedInSeconds / dataHeader.tresolution) / 86400;
     CalibrationData *left = calibrationData->getCalibrationData_left_by_time(beginPointMJD);
     for (int i = 0; i < read_data.size(); ++i) {
-        read_data[i] = (read_data[i] - (double) left->get_zero_level()[0]) / left->get_one_kelvin()[0];
+        read_data[i] = (read_data[i] - (double) left->get_zero_level()[300]) / left->get_one_kelvin()[300];
     }
     return read_data;
 }

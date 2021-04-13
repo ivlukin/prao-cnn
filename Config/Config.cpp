@@ -34,6 +34,8 @@ Config::Config(char *fileName) {
     this->durationStarSeconds = d["durationStarSeconds"].GetDouble();
     this->summationEnabled = d["summationEnabled"].GetBool();
     this->frequencyAverage = d["frequencyAverage"].GetBool();
+    if (d.HasMember("endDate"))
+        this->endDate = d["endDate"].GetString();
 }
 
 const std::string &Config::getStartDate() const {
@@ -79,4 +81,8 @@ bool Config::isSummationEnabled() const {
 
 bool Config::isFrequencyAverage() const {
     return frequencyAverage;
+}
+
+const std::string &Config::getEndDate() const {
+    return endDate;
 }
