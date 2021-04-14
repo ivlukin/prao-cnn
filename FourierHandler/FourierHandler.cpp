@@ -10,9 +10,8 @@ int FourierHandler::run() {
         FilesListItem item = entry.first;
         std::vector<tm *> timeStamps = entry.second;
         auto *seeker = new DataSeeker(item.filepath);
-        std::cout << "reading from file: " << item.filepath << std::endl;
         seeker->setCalibrationData(this->storage);
-        int size = seeker->getHeader().nbands == 33 ? 2048 * 8 : 2048; // сейчас захардкожено, вообще надо из duration считать
+        int size = floor(duration / seeker->getHeader().tresolution - 0.5);
         for (tm *timestamp: timeStamps) {
             time_t epochSecondsSunTime = mktime(timestamp);
             time_t timeElapsedFromHourBegin = epochSecondsSunTime % (60 * 60);
@@ -60,7 +59,7 @@ int FourierHandler::run() {
                     for (int j = 0; j < (size / 2 + 1) * 2 - 1; j += 2) {
                         float real = result[j];
                         float imaginary = result[j + 1];
-                        float modul = std::sqrt(real * real + imaginary * imaginary);
+                        float modul = std::sqrt(real * real);
                         modulus.push_back(modul);
                     }
                     bandMap[band] = modulus;
