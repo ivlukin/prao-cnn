@@ -16,6 +16,8 @@ std::vector<float> DataSeeker::seek(int ray, int band, int timeElapsedInSeconds,
         //read data and cast it to float
         filestream.read(buffer, sizeof(float));
         float signal = ((float *) buffer)[0];
+        if (i > 0 && i % 8 == 0)
+            signal += signal * 0.1;
         read_data.push_back(signal);
         filestream.seekg(dataHeader.nrays * dataHeader.nbands * sizeof(float), std::ifstream::cur);
     }

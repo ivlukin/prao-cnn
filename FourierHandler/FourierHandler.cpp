@@ -56,11 +56,9 @@ int FourierHandler::run() {
                     float *result = fourierTransformer.getResult();
                     fourierTransformer.releaseResources();
                     std::vector<float> modulus;
-                    for (int j = 0; j < (size / 2 + 1) * 2 - 1; j += 2) {
-                        float real = result[j];
-                        float imaginary = result[j + 1];
-                        float modul = std::sqrt(real * real);
-                        modulus.push_back(modul);
+                    modulus.push_back(0);
+                    for (int j = 2; j < (size / 2 + 1) * 2 - 1; j += 2) {
+                        modulus.push_back(std::sqrt(result[j] * result[j]));
                     }
                     bandMap[band] = modulus;
                     // очень важно очистить память после перекидывания посчитанных результатов
