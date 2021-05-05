@@ -44,6 +44,8 @@ ifstream &operator>>(ifstream & in, DataHeader& dt){
     }
 
     in >> tmp >> dt.tresolution >> tmp >> dt.npoints >> tmp >> dt.nbands;
+    if (100 - dt.tresolution < 0.1)
+        dt.tresolution = 100;
     dt.tresolution /= 1000;
 
     in >> tmp;

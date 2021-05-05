@@ -2,32 +2,21 @@
 #include "SummationHandler.h"
 
 void SummationHandler::calculateSummary() {
-    int size = relatedTimestamps[0].getRayMap()[0].getBandSummary().size();
+    int size = relatedTimestamps[0].getRayMap()[0].getRayModulus().size();
     summaryForEveryRayInTime = std::map<int, std::vector<double>>();
     for (int i = 0; i < 48; ++i) {
         summaryForEveryRayInTime[i] = std::vector<double>(size);
         std::fill(summaryForEveryRayInTime[i].begin(), summaryForEveryRayInTime[i].end(), 0);
     }
 
-    if (!frequencyAverage) {
-        for (Timestamp timestamp: relatedTimestamps) {
-            for (int i = 0; i < 48; i++) {
-                Ray ray = timestamp.getRayMap()[i];
-                for (int j = 0; j < ray.getBandSummary().size(); j++) {
-                    summaryForEveryRayInTime[i][j] += ray.getBandSummary()[j];
-                }
+    for (Timestamp timestamp: relatedTimestamps) {
+        for (int i = 0; i < 48; i++) {
+            Ray ray = timestamp.getRayMap()[i];
+            for (int j = 0; j < ray.getRayModulus().size(); j++) {
+                summaryForEveryRayInTime[i][j] += ray.getRayModulus()[j];
             }
         }
     }
-    else {
-        for (Timestamp timestamp: relatedTimestamps) {
-            for (int i = 0; i < 48; i++) {
-                Ray ray = timestamp.getRayMap()[i];
-                for (int j = 0; j < ray.getBandAverage().size(); j++) {
-                    summaryForEveryRayInTime[i][j] += ray.getBandAverage()[j];
-                }
-            }
-        }
-    }
+
     isCalculated = true;
 }

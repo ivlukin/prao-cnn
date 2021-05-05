@@ -22,14 +22,12 @@ private:
     std::map<int, std::vector<double>> raysAndSummary;
     void writeToFile(const std::string& filepath, int ray_num, const std::vector<double>& fourierResult);
     std::string getDirPathFromTm(tm* dateTime);
-    bool frequencyAverage;
 public:
     SummationWriteHandler() = default;
     SummationWriteHandler(const Config& config, std::map<int, std::vector<double>> raysAndSummary , TimeCoordinate timeCoordinate) {
         this->raysAndSummary = std::move(raysAndSummary);
         this->outputPath = config.getOutputPath();
         this->timeCoordinate = std::move(timeCoordinate);
-        this->frequencyAverage = config.isFrequencyAverage();
     }
     void write();
 };

@@ -3,7 +3,6 @@
 #include "FourierHandler.h"
 
 
-
 int FourierHandler::run() {
     this->calculatedData = std::vector<Timestamp>();
     for (auto const &entry: this->fileItemToTimestampsMap) {
@@ -11,14 +10,15 @@ int FourierHandler::run() {
         std::vector<tm *> timeStamps = entry.second;
         auto *seeker = new DataSeeker(item.filepath);
         seeker->setCalibrationData(this->storage);
-        int size = floor(duration / seeker->getHeader().tresolution - 0.5);
+        int size = floor(duration / seeker->getHeader().tresolution);
         for (tm *timestamp: timeStamps) {
             time_t epochSecondsSunTime = mktime(timestamp);
             time_t timeElapsedFromHourBegin = epochSecondsSunTime % (60 * 60);
             Timestamp skyTimestamp = Timestamp(timestamp);
             for (int _ray = 0; _ray < 48; _ray++) {
-                Ray ray = Ray(_ray + 1);
-                std::map<int, std::vector<float>> bandMap;
+                Ray ray = Ray(_ray + 1, seeker->getHeader().nbands - 1);
+                std::vector<float> modulus = std::vector<float>(size);
+                std::fill(modulus.begin(), modulus.end(), 0);
                 // суммирующий band не нужен
                 for (int band = 0; band < seeker->getHeader().nbands - 1; ++band) {
                     std::vector<float> readData;
@@ -55,16 +55,15 @@ int FourierHandler::run() {
                     fourierTransformer.transform();
                     float *result = fourierTransformer.getResult();
                     fourierTransformer.releaseResources();
-                    std::vector<float> modulus;
-                    modulus.push_back(0);
-                    for (int j = 2; j < (size / 2 + 1) * 2 - 1; j += 2) {
-                        modulus.push_back(std::sqrt(result[j] * result[j]));
-                    }
-                    bandMap[band] = modulus;
+
+                    // просто суммируем по всем частотам, затем посчитаем среднее
+                    for (int j = 0; j < size; ++j)
+                        modulus[j] += result[j];
+
                     // очень важно очистить память после перекидывания посчитанных результатов
                     delete[] result;
                 }
-                ray.setBandMap(bandMap);
+                ray.setComplexAmplitudes(modulus);
                 std::pair<int, Ray> to_insert = std::pair<int, Ray>(_ray + 1, ray);
                 skyTimestamp.getRayMap()[_ray] = ray;
             }

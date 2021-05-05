@@ -1,10 +1,13 @@
 
+#include <cmath>
 #include "DataSeeker.h"
 
 std::vector<float> DataSeeker::seek(int ray, int band, int timeElapsedInSeconds, int size) {
     std::ifstream filestream(filename, std::ios::in | std::ios::binary);
     std::vector<float> read_data = std::vector<float>();
     long long elapsedPoints = (int) (timeElapsedInSeconds / dataHeader.tresolution);
+    std::cout << "time elapsed in seconds: " << timeElapsedInSeconds << " elapsedPoints: " << elapsedPoints << std::endl;
+
     long long caret =
             (long long) (dataHeader.nrays * dataHeader.nbands * sizeof(float) * elapsedPoints)
             + this->header_length +

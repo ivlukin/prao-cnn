@@ -6,25 +6,22 @@
 
 #include <map>
 #include <vector>
+#include <complex>
 
 class Ray {
 private:
-    std::map<int, std::vector<float>> bandMap;
+    std::vector<float> complexAmplitudes;
     int number;
-    std::vector<float> bandSummary;
-    std::vector<float> average;
+    std::vector<float> modulus;
     void calculateBandSummary();
+    int nbands;
 public:
     Ray() = default;
-    explicit Ray(int ray_num): number(ray_num) {}
+    Ray(int ray_num, int nbands): number(ray_num), nbands(nbands) {}
 
-    std::vector<float> &getBandSummary();
+    std::vector<float> &getRayModulus();
 
-    void setBandMap(const std::map<int, std::vector<float>> &bandMap) {
-        Ray::bandMap = bandMap;
-    }
-
-    std::vector<float> &getBandAverage();
+    void setComplexAmplitudes(const std::vector<float> &complexAmplitudes);
 };
 
 
