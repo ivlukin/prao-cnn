@@ -5,15 +5,16 @@
 
 std::vector<float> &Ray::getRayModulus() {
     if (this->modulus.empty())
-        calculateBandSummary();
+        calculateModulus();
     return modulus;
 }
 
-void Ray::calculateBandSummary() {
+void Ray::calculateModulus() {
     int size = complexAmplitudes.size();
     modulus = std::vector<float>();
 
-    for (int j = 0; j < (size / 2 + 1) * 2 - 1; j += 2) {
+    modulus.push_back(0);
+    for (int j = 2; j < size - 1; j += 2) {
         float real = complexAmplitudes[j] / (float) nbands;
         float imaginary = complexAmplitudes[j + 1] / (float) nbands;
         modulus.push_back(std::sqrt(real * real + imaginary * imaginary));

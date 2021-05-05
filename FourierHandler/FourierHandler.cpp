@@ -17,8 +17,8 @@ int FourierHandler::run() {
             Timestamp skyTimestamp = Timestamp(timestamp);
             for (int _ray = 0; _ray < 48; _ray++) {
                 Ray ray = Ray(_ray + 1, seeker->getHeader().nbands - 1);
-                std::vector<float> modulus = std::vector<float>(size);
-                std::fill(modulus.begin(), modulus.end(), 0);
+                std::vector<float> complexAmplitudes = std::vector<float>((size / 2 + 1) * 2);
+                std::fill(complexAmplitudes.begin(), complexAmplitudes.end(), 0);
                 // суммирующий band не нужен
                 for (int band = 0; band < seeker->getHeader().nbands - 1; ++band) {
                     std::vector<float> readData;
@@ -57,13 +57,13 @@ int FourierHandler::run() {
                     fourierTransformer.releaseResources();
 
                     // просто суммируем по всем частотам, затем посчитаем среднее
-                    for (int j = 0; j < size; ++j)
-                        modulus[j] += result[j];
+                    for (int j = 0; j < (size / 2 + 1) * 2; ++j)
+                        complexAmplitudes[j] += result[j];
 
                     // очень важно очистить память после перекидывания посчитанных результатов
                     delete[] result;
                 }
-                ray.setComplexAmplitudes(modulus);
+                ray.setComplexAmplitudes(complexAmplitudes);
                 std::pair<int, Ray> to_insert = std::pair<int, Ray>(_ray + 1, ray);
                 skyTimestamp.getRayMap()[_ray] = ray;
             }

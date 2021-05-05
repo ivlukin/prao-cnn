@@ -1,7 +1,7 @@
 {
-  "startDate": "2015-01-01 14:06:00",
-  "endDate": "2015-01-01 14:06:00",
-  "observationLength": 3,
+  "startDate": "2015-01-01 14:05:10",
+  "endDate": "2015-01-01 14:05:10",
+  "observationLength": 30,
   "range": "N1",
   "step": 60,
   "outputPath": "/home/sorrow/prao-output-01-01-15",

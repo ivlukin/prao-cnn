@@ -13,7 +13,7 @@ private:
     std::vector<float> complexAmplitudes;
     int number;
     std::vector<float> modulus;
-    void calculateBandSummary();
+    void calculateModulus();
     int nbands;
 public:
     Ray() = default;

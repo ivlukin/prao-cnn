@@ -57,8 +57,7 @@ int main(int argc, char **argv) {
         if (config.isSummationEnabled()) {
             SummationHandler summarizeHandler = SummationHandler(config, fourierHandler.getCalculatedData());
             SummationWriteHandler writeHandler = SummationWriteHandler(config,
-                                                                       summarizeHandler.getSummaryForEveryRayInTime(),
-                                                                       coordinate);
+                                                                       summarizeHandler.getSummaryForEveryRayInTime(),coordinate);
             writeHandler.write();
         } else {
             SimpleWriteHandler simpleWriteHandler = SimpleWriteHandler(config, fourierHandler.getCalculatedData(), coordinate);
