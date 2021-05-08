@@ -34,7 +34,7 @@ void Ray::calculateRawDataAverage() {
     int size = rawData.size();
     rawDataAverage = std::vector<float>();
     for (int i = 0; i < size; ++i)
-        rawDataAverage.push_back(rawData[i] / 1);
+        rawDataAverage.push_back(rawData[i] / (float) nbands);
 }
 
 std::vector<float> &Ray::getRawDataAverage() {
