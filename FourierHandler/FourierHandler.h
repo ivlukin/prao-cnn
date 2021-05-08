@@ -24,14 +24,16 @@ private:
     OpenCLContext context;
     std::vector<Timestamp> calculatedData;
     CalibrationDataStorage *storage;
+    bool isWriteRawData = false;
 
 public:
     FourierHandler() = default;
 
-    FourierHandler(std::map<FilesListItem, std::vector<tm*>> fileItemToTimestampsMap, OpenCLContext context, double duration) {
-        this->duration = duration;
+    FourierHandler(const Config &config, std::map<FilesListItem, std::vector<tm*>> fileItemToTimestampsMap, OpenCLContext context) {
+        this->duration = config.getDurationStarSeconds();
         this->fileItemToTimestampsMap = std::move(fileItemToTimestampsMap);
         this->context = context;
+        this->isWriteRawData = config.isWriteRawData();
     }
     int run();
 

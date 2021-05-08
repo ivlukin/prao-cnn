@@ -49,16 +49,19 @@ int main(int argc, char **argv) {
         const std::vector<double> &coordinatesWithSameStarTime = coordinate.getTimeCoordinatesWithSameStarTime();
         FileHandler fileHandler = FileHandler(coordinatesWithSameStarTime, config);
         fileHandler.calculateRelatedFiles();
-        FourierHandler fourierHandler = FourierHandler(fileHandler.getFileNameToTimestampsMap(), context,
-                                                       config.getDurationStarSeconds());
+        FourierHandler fourierHandler = FourierHandler(config, fileHandler.getFileNameToTimestampsMap(), context);
         fourierHandler.setStorage(storage);
         fourierHandler.run();
 
         if (config.isSummationEnabled()) {
-            SummationHandler summarizeHandler = SummationHandler(config, fourierHandler.getCalculatedData());
+            SummationHandler summarizeHandler = SummationHandler(fourierHandler.getCalculatedData());
             SummationWriteHandler writeHandler = SummationWriteHandler(config,
                                                                        summarizeHandler.getSummaryForEveryRayInTime(),coordinate);
             writeHandler.write();
+            if (config.isWriteRawData()) {
+                SummationWriteHandler rawWriteHandler = SummationWriteHandler(config, summarizeHandler.getSummaryOfRawDataForEveryRayInTime(), coordinate);
+                rawWriteHandler.write();
+            }
         } else {
             SimpleWriteHandler simpleWriteHandler = SimpleWriteHandler(config, fourierHandler.getCalculatedData(), coordinate);
             simpleWriteHandler.write();

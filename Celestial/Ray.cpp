@@ -25,3 +25,20 @@ void Ray::calculateModulus() {
 void Ray::setComplexAmplitudes(const std::vector<float> &complexAmplitudes) {
     Ray::complexAmplitudes = complexAmplitudes;
 }
+
+void Ray::setRawData(const std::vector<float> &rawData) {
+    Ray::rawData = rawData;
+}
+
+void Ray::calculateRawDataAverage() {
+    int size = rawData.size();
+    rawDataAverage = std::vector<float>();
+    for (int i = 0; i < size; ++i)
+        rawDataAverage.push_back(rawData[i] / 1);
+}
+
+std::vector<float> &Ray::getRawDataAverage() {
+    if (rawDataAverage.empty())
+        calculateRawDataAverage();
+    return rawDataAverage;
+}

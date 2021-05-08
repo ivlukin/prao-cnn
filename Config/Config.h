@@ -82,6 +82,11 @@ private:
        * необязательный параметр
        */
        std::string endDate;
+
+       /**
+        * Записывать ли в отдельный файл сырые данные
+        */
+        bool writeRawData;
 public:
     const std::string &getStartDate() const;
 
@@ -104,6 +109,8 @@ public:
     bool isSummationEnabled() const;
 
     const std::string &getEndDate() const;
+
+    bool isWriteRawData() const;
 };
 
 

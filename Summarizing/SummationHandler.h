@@ -12,9 +12,13 @@ class SummationHandler {
 private:
     std::vector<Timestamp> relatedTimestamps;
     std::map<int, std::vector<double>> summaryForEveryRayInTime;
+    std::map<int, std::vector<double>> summaryOfRawDataForEveryRayInTime;
     bool isCalculated = false;
+    bool isRawCalculated = false;
+    void calculateSummary();
+    void calculateRawSummary();
 public:
-    SummationHandler(const Config& config, std::vector<Timestamp> relatedTimestamps) {
+    explicit SummationHandler(std::vector<Timestamp> relatedTimestamps) {
         this->relatedTimestamps = std::move(relatedTimestamps);
     }
     SummationHandler() = default;
@@ -25,8 +29,13 @@ public:
         return summaryForEveryRayInTime;
     }
 
+    std::map<int, std::vector<double>> &getSummaryOfRawDataForEveryRayInTime() {
+        if (!isRawCalculated)
+            calculateRawSummary();
+        return summaryOfRawDataForEveryRayInTime;
+    }
 
-    void calculateSummary();
+
 };
 
 

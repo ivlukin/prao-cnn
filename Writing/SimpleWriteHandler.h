@@ -26,12 +26,15 @@ private:
 
     std::string getDirPathFromTm(tm *dateTime);
 
+    bool isWriteRawData = false;
+
 
 public:
     SimpleWriteHandler(const Config &config, std::vector<Timestamp> calculatedData, TimeCoordinate coordinate) {
         this->outputPath = config.getOutputPath();
         this->calculatedData = std::move(calculatedData);
         this->timeCoordinate = std::move(coordinate);
+        this->isWriteRawData = config.isWriteRawData();
     }
 
     void write();

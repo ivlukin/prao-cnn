@@ -34,6 +34,10 @@ Config::Config(char *fileName) {
     this->summationEnabled = d["summationEnabled"].GetBool();
     if (d.HasMember("endDate"))
         this->endDate = d["endDate"].GetString();
+    if (d.HasMember("writeRawData"))
+        this->writeRawData = d["writeRawData"].GetBool();
+    else
+        this->writeRawData = false;
 }
 
 const std::string &Config::getStartDate() const {
@@ -79,4 +83,8 @@ bool Config::isSummationEnabled() const {
 
 const std::string &Config::getEndDate() const {
     return endDate;
+}
+
+bool Config::isWriteRawData() const {
+    return writeRawData;
 }

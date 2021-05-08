@@ -55,7 +55,8 @@ private:
     DataHeader dataHeader{};
     std::string filename;
     CalibrationDataStorage *calibrationData;
-    int count_point_position{};
+
+    long getCaretPosition(int nrays, int nbands, int ray, int band, int _header_length, int elapsedPoints);
 };
 
 

@@ -23,10 +23,15 @@ void SimpleWriteHandler::write() {
         for (const auto &raySummaryEntry: timestamp.getRayMap()) {
             int ray_num = raySummaryEntry.first + 1;
             Ray thisRay = raySummaryEntry.second;
-            std::vector<float> bandSummaryForThisRay;
-            bandSummaryForThisRay = thisRay.getRayModulus();
+            std::vector<float> bandSummaryForThisRay = thisRay.getRayModulus();
             std::string filePath = subDirPath + Utils::getSystemSeparator() + std::to_string(ray_num) + ".fou";
             writeToFile(filePath, ray_num, bandSummaryForThisRay);
+
+            if (isWriteRawData) {
+                std::vector<float> rawDataForThisRay = thisRay.getRawDataAverage();
+                std::string rawFilePath = subDirPath + Utils::getSystemSeparator() + std::to_string(ray_num) + ".praw";
+                writeToFile(rawFilePath, ray_num, rawDataForThisRay);
+            }
         }
     }
 }

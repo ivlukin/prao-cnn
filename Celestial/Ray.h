@@ -11,9 +11,12 @@
 class Ray {
 private:
     std::vector<float> complexAmplitudes;
+    std::vector<float> rawData;
     int number;
     std::vector<float> modulus;
+    std::vector<float> rawDataAverage;
     void calculateModulus();
+    void calculateRawDataAverage();
     int nbands;
 public:
     Ray() = default;
@@ -21,7 +24,11 @@ public:
 
     std::vector<float> &getRayModulus();
 
+    void setRawData(const std::vector<float> &rawData);
+
     void setComplexAmplitudes(const std::vector<float> &complexAmplitudes);
+
+    std::vector<float> &getRawDataAverage();
 };
 
 

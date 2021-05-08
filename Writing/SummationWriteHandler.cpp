@@ -15,7 +15,7 @@ void SummationWriteHandler::write() {
     for (auto &rayAndSummary: raysAndSummary) {
         int ray_num = rayAndSummary.first + 1;
         std::vector<double> data = rayAndSummary.second;
-        std::string filePath = totalDirPath + Utils::getSystemSeparator() + std::to_string(ray_num) + ".fou";
+        std::string filePath = totalDirPath + Utils::getSystemSeparator() + std::to_string(ray_num) + extension;
         writeToFile(filePath, ray_num, data);
     }
 }

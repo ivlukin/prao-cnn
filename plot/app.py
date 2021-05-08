@@ -55,11 +55,12 @@ def run(dir_path):
     logger.debug(glob.glob(os.path.expanduser(runtime['dir_path'] + os.sep + "*.fou")))
     runtime['files'] = list(
         map(os.path.basename, glob.glob(os.path.expanduser(runtime['dir_path'] + os.sep + "*.fou"))))
+    runtime['files'] += list(map(os.path.basename, glob.glob(os.path.expanduser(runtime['dir_path'] + os.sep + "*.praw"))))
     runtime['files'].sort(key=lambda fname: int(fname[:fname.index(".")]))
     logger.debug("need to sort:")
     logger.debug(runtime['files'])
     if len(runtime['files']) == 0:
-        logger.error('List of .fou files is empty, exiting')
+        logger.error('List of files is empty, exiting')
         return
 
     runtime['file'] = None
