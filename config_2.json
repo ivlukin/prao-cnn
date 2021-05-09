@@ -1,7 +1,7 @@
 {
   "startDate": "2015-01-01 14:05:10",
-  "endDate": "2015-01-01 14:10:20",
-  "observationLength": 1,
+  "endDate": "2015-01-01 14:05:10",
+  "observationLength": 30,
   "range": "N1",
   "step": 60,
   "outputPath": "/home/sorrow/prao-output-01-01-15",
@@ -10,6 +10,6 @@
   "calibrationListPath": "/home/sorrow/CLionProjects/prao-cnn/01-15-calb.txt",
   "durationStarSeconds": 204.8,
   "summationEnabled": false,
-  "writeRawData": true
+  "writeRawData": false
 }
 
