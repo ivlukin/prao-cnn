@@ -3,11 +3,17 @@
 # длина наблюдений
 # выходная папка
 import datetime
+import os
+import statistics
+
+import array
 
 from Pulsar import Pulsar
 import json
 from pathlib import Path
 from shutil import copyfile
+from os import listdir
+from os.path import isfile, join
 
 content = []
 with open("pulsars.txt") as f:
@@ -40,17 +46,79 @@ def extract_specters(dir_path, ray):
         copyfile(str(path), dest)
 
 
+def read_fou_file(file_path):
+    # get header length
+    with open(file_path, "rb") as f:
+        data = f.read(1024)
+        numpar = int(data.split(b'\n')[0].split(b'\t')[1])
+        header_length = sum([len(data.split(b'\n')[i]) + 1 for i in range(numpar)])
+
+    signals = array.array('f')
+    buffer_size = os.path.getsize(file_path) - header_length
+
+    with open(file_path, 'rb') as fp:
+        fp.seek(header_length)
+        signals.fromfile(fp, buffer_size // 4)
+
+    return signals
+
+
+def has_pulsar(signals):
+    isignals = signals[1:]
+    count = 0
+    index = 0
+    for i in range(len(isignals) // 50):
+        batch = isignals[index:index + 50]
+        if (max(batch) / statistics.median(batch)) > 5:
+            count += 1
+        index += 50
+
+    return count > 5
+
+
+def analyze_specters(dir_path):
+    files = [f for f in listdir(dir_path) if isfile(join(dir_path, f)) and ".fou" in f]
+    for file_path in files:
+        amplitudes = read_fou_file(join(dir_path, file_path))
+        if not has_pulsar(amplitudes):
+            print("there is no pulsar on {file}".format(file=file_path))
+            os.remove(file_path)
+
+
+def copy_all_fou_files(src_dir, dest_dir):
+    pathlist = Path(src_dir).glob('**/*.fou')
+
+    for path in pathlist:
+        dest = dest_dir + "/" + path.parts[-1]
+        copyfile(str(path), dest)
+
+
+def merge_all_specters(dir_path):
+    result = []
+    files = [f for f in listdir(dir_path) if isfile(join(dir_path, f)) and ".fou" in f]
+    for file_path in files:
+        amplitudes = read_fou_file(join(dir_path, file_path))
+        result.append(";".join([str(x) for x in amplitudes]))
+
+    str_result = "#".join(result)
+    with open(dir_path + "/total.txt", 'w') as out:
+        out.write(str_result)
+
 
 for line in content:
     if "NAME" in line:
         continue
     pulsar = Pulsar(line)
     if pulsar.ray() is not None:
+        print("processing", pulsar.name)
         config = prepare_config(pulsar)
         config_path = 'configs/{name}_config.json'.format(name=pulsar.name)
         with open(config_path, 'w') as outfile:
             json.dump(config, outfile)
-        #TODO exec prao-cnn
+        command = "/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config {config}".format(
+            config='configs/{name}_config.json'.format(name=pulsar.name))
+        os.system(command)
         extract_specters(config['outputPath'], pulsar.ray())
-
-
+        analyze_specters(config['outputPath'] + "/actual")
+        copy_all_fou_files(config['outputPath'] + "/actual", "/home/sorrow/learndata")
+merge_all_specters("/home/sorrow/learndata")
