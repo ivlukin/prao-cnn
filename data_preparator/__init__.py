@@ -6,6 +6,8 @@ import datetime
 
 from Pulsar import Pulsar
 import json
+from pathlib import Path
+from shutil import copyfile
 
 content = []
 with open("pulsars.txt") as f:
@@ -30,10 +32,25 @@ def prepare_config(pulsar):
     return config_data
 
 
+def extract_specters(dir_path, ray):
+    Path(dir_path + "actual").mkdir(parents=True, exist_ok=True)
+    pathlist = Path(dir_path).glob('**/{ray}.fou'.format(ray=ray))
+    for path in pathlist:
+        dest = dir_path + "actual/" + path.parts[-2] + "_" + path.parts[-1]
+        copyfile(str(path), dest)
+
+
+
 for line in content:
     if "NAME" in line:
         continue
     pulsar = Pulsar(line)
     if pulsar.ray() is not None:
-        with open('configs/{name}_config.json'.format(name=pulsar.name), 'w') as outfile:
-            json.dump(prepare_config(pulsar), outfile)
+        config = prepare_config(pulsar)
+        config_path = 'configs/{name}_config.json'.format(name=pulsar.name)
+        with open(config_path, 'w') as outfile:
+            json.dump(config, outfile)
+        #TODO exec prao-cnn
+        extract_specters(config['outputPath'], pulsar.ray())
+
+
