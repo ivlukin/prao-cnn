@@ -26,15 +26,16 @@ def prepare_config(pulsar):
     start_date_shifted = pulsar.msk_begin - datetime.timedelta(seconds=duration / 2)
     config_data['startDate'] = start_date_shifted.strftime('%Y-%m-%d %H:%M:%S')
     config_data['endDate'] = start_date_shifted.strftime('%Y-%m-%d %H:%M:%S')
-    config_data['observationLength'] = 90
+    config_data['observationLength'] = 149
     config_data['range'] = pulsar.range
     config_data['outputPath'] = '/home/sorrow/prao-output-main/{name}/'.format(name=pulsar.name)
-    config_data['mode'] = 'pnt'
+    config_data['mode'] = '.pnt'
     config_data["fileListPath"] = "/home/sorrow/CLionProjects/prao-cnn/01-15-list-files.txt"
     config_data["calibrationListPath"] = "/home/sorrow/CLionProjects/prao-cnn/01-15-calb.txt"
     config_data["durationStarSeconds"] = duration
     config_data["summationEnabled"] = False
     config_data["writeRawData"] = False
+    config_data["step"] = 60
     return config_data
 
 
@@ -104,12 +105,12 @@ def merge_all_specters(dir_path):
     with open(dir_path + "/total.txt", 'w') as out:
         out.write(str_result)
 
-
 for line in content:
     if "NAME" in line:
         continue
     pulsar = Pulsar(line)
-    if pulsar.ray() is not None:
+
+    if pulsar.ray() is not None and pulsar.range == "N1":
         print("processing", pulsar.name)
         config = prepare_config(pulsar)
         config_path = 'configs/{name}_config.json'.format(name=pulsar.name)
@@ -117,6 +118,7 @@ for line in content:
             json.dump(config, outfile)
         command = "/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config {config}".format(
             config='configs/{name}_config.json'.format(name=pulsar.name))
+        print(command)
         os.system(command)
         extract_specters(config['outputPath'], pulsar.ray())
         analyze_specters(config['outputPath'] + "/actual")

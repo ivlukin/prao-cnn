@@ -22,7 +22,7 @@ struct FilesListItem{
     friend istream &operator>>(istream & in, FilesListItem& dt);
 
     bool operator < (const FilesListItem& other) const {
-        return filename < other.filename;
+        return time_JD < other.time_JD;
     }
 };
 

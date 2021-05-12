@@ -44,14 +44,16 @@ void TimeCoordinateHandler::generateTimeCoordinates() {
     std::string searchingFile = Utils::getFileFromDate(year, month, mday, hour, range, mode);
     bool found = scanForFileItem(searchingFile);
     if (!found) {
-        throw std::logic_error("couldn't find entry in fileListPath of startDate");
+        throw std::logic_error(
+                "couldn't find entry in fileListPath of startDate: " + to_string(year) + "-" + to_string(month) + "-" +
+                        to_string(hour) + ":" + to_string(hour) );
     }
 
     double startDateTime_StarTime = to_starTime(mktime(&this->startDateSun));
     int numIterations;
     if (hasEndDate) {
         double endDateTime_EndDate = to_starTime(mktime(&this->endDateSun));
-        numIterations = (int)(to_SunTime(endDateTime_EndDate - startDateTime_StarTime) / this->step) + 1;
+        numIterations = (int) (to_SunTime(endDateTime_EndDate - startDateTime_StarTime) / this->step) + 1;
     } else {
         //startDateTime_StarTime += firstFile.star_time_start;
         numIterations = (int) (to_SunTime(3600 * 24) / this->step);
