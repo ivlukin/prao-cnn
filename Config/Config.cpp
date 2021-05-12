@@ -38,6 +38,10 @@ Config::Config(char *fileName) {
         this->writeRawData = d["writeRawData"].GetBool();
     else
         this->writeRawData = false;
+    if (d.HasMember("deviceNumber"))
+        this -> deviceNumber = d["deviceNumber"].GetInt();
+    else
+        this->deviceNumber = -1;
 }
 
 const std::string &Config::getStartDate() const {
@@ -87,4 +91,8 @@ const std::string &Config::getEndDate() const {
 
 bool Config::isWriteRawData() const {
     return writeRawData;
+}
+
+int Config::getDeviceNumber() const {
+    return deviceNumber;
 }

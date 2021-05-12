@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     mkdir(config.getOutputPath().c_str(), 0777);
 #endif
     Utils::createDirectory(config.getOutputPath());
-    OpenCLContext context = OpenCLContext();
+    OpenCLContext context = OpenCLContext(config.getDeviceNumber());
     context.initContext();
     std::cout << "reading calibration storage..." << std::endl;
     CalibrationDataStorage *storage = readCalibrationDataStorage(config.getCalibrationListPath());

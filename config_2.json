@@ -10,6 +10,7 @@
   "calibrationListPath": "/home/sorrow/CLionProjects/prao-cnn/01-15-calb.txt",
   "durationStarSeconds": 204.8,
   "summationEnabled": false,
-  "writeRawData": false
+  "writeRawData": false,
+  "deviceNumber": 1
 }
 

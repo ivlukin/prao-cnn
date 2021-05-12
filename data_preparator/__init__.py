@@ -36,6 +36,7 @@ def prepare_config(pulsar):
     config_data["summationEnabled"] = False
     config_data["writeRawData"] = False
     config_data["step"] = 60
+    config_data["deviceNumber"] = 1
     return config_data
 
 

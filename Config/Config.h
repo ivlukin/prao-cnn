@@ -87,6 +87,12 @@ private:
         * Записывать ли в отдельный файл сырые данные
         */
         bool writeRawData;
+
+        /**
+         * Номер устройства, на котором будет выполняться программа
+         * Используется только если есть точное знания номера устройства
+         */
+         int deviceNumber;
 public:
     const std::string &getStartDate() const;
 
@@ -111,6 +117,8 @@ public:
     const std::string &getEndDate() const;
 
     bool isWriteRawData() const;
+
+    int getDeviceNumber() const;
 };
 
 

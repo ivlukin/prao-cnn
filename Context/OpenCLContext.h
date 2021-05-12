@@ -13,6 +13,9 @@
 class OpenCLContext {
 public:
     OpenCLContext() = default;
+    explicit OpenCLContext(int deviceNumber) {
+        this->deviceNumber = deviceNumber;
+    }
 
 
     /**
@@ -42,6 +45,8 @@ private:
      * Сканирует все доступные девайсы и получает от пользователя ответ, какой девайс использовать
      */
     void scanDevices();
+
+    int deviceNumber = -1;
 
 public:
 

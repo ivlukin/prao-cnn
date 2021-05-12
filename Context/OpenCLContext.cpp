@@ -65,7 +65,6 @@ cl_kernel OpenCLContext::compile_kernel(const char filename[], const char kernel
 }
 
 
-
 OpenCLContext &OpenCLContext::operator=(const OpenCLContext &oclContext) {
     if (this == &oclContext)
         return *this;
@@ -107,7 +106,6 @@ void OpenCLContext::scanDevices() {
     ret = clGetPlatformIDs(ret_num_platforms, platforms, nullptr);
     int globalDeviceCount = 0;
     std::map<int, cl_device_id> deviceIdMap;
-    std::cout << "choose device number" << std::endl;
     for (int i = 0; i < ret_num_platforms; ++i) {
         for (int j = 1; j < 3; j++) {
             cl_platform_id platform_id = platforms[i];
@@ -138,7 +136,12 @@ void OpenCLContext::scanDevices() {
     }
     delete[] platforms;
     int chosenDeviceNumber;
-    std::cin >> chosenDeviceNumber;
+    if (deviceNumber == -1) {
+        std::cout << "choose device number" << std::endl;
+        std::cin >> chosenDeviceNumber;
+    }
+    else
+        chosenDeviceNumber = deviceNumber;
     std::cout << "initializating OpenCL context..." << std::endl;
     device = deviceIdMap[chosenDeviceNumber];
 }
