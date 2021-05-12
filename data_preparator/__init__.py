@@ -42,10 +42,16 @@ def prepare_config(pulsar):
 
 def extract_specters(dir_path, ray):
     Path(dir_path + "actual").mkdir(parents=True, exist_ok=True)
-    pathlist = Path(dir_path).glob('**/{ray}.fou'.format(ray=ray))
-    for path in pathlist:
-        dest = dir_path + "actual/" + path.parts[-2] + "_" + path.parts[-1]
-        copyfile(str(path), dest)
+    raylist = [ray]
+    if ray + 1 <= 48:
+        raylist.append(ray + 1)
+    if ray - 1 >= 1:
+        raylist.append(ray - 1)
+    for _ray in raylist:
+        pathlist = Path(dir_path).glob('**/{ray}.fou'.format(ray=_ray))
+        for path in pathlist:
+            dest = dir_path + "actual/" + path.parts[-2] + "_" + path.parts[-1]
+            copyfile(str(path), dest)
 
 
 def read_fou_file(file_path):
@@ -91,7 +97,7 @@ def copy_all_fou_files(src_dir, dest_dir):
     pathlist = Path(src_dir).glob('**/*.fou')
 
     for path in pathlist:
-        dest = dest_dir + "/" + path.parts[-1]
+        dest = join(dest_dir, path.parts[-1])
         copyfile(str(path), dest)
 
 
@@ -118,10 +124,10 @@ for line in content:
         with open(config_path, 'w') as outfile:
             json.dump(config, outfile)
         command = "/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config {config}".format(
-            config='configs/{name}_config.json'.format(name=pulsar.name))
+            config=config_path)
         print(command)
         os.system(command)
         extract_specters(config['outputPath'], pulsar.ray())
-        analyze_specters(config['outputPath'] + "/actual")
-        copy_all_fou_files(config['outputPath'] + "/actual", "/home/sorrow/learndata")
+        analyze_specters(join(config['outputPath'], "actual"))
+        copy_all_fou_files(join(config['outputPath'], "actual"), "/home/sorrow/learndata")
 merge_all_specters("/home/sorrow/learndata")
