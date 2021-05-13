@@ -41,6 +41,7 @@ def prepare_config(pulsar):
 
 
 def extract_specters(dir_path, ray):
+    print("extracting specters...")
     Path(dir_path + "actual").mkdir(parents=True, exist_ok=True)
     raylist = [ray]
     if ray + 1 <= 48:
@@ -77,20 +78,21 @@ def has_pulsar(signals):
     index = 0
     for i in range(len(isignals) // 50):
         batch = isignals[index:index + 50]
-        if (max(batch) / statistics.median(batch)) > 5:
+        if (max(batch) / statistics.median(batch)) > 3:
             count += 1
         index += 50
 
-    return count > 5
+    return count >= 3
 
 
 def analyze_specters(dir_path):
+    print("analyzing_specters")
     files = [f for f in listdir(dir_path) if isfile(join(dir_path, f)) and ".fou" in f]
     for file_path in files:
         amplitudes = read_fou_file(join(dir_path, file_path))
         if not has_pulsar(amplitudes):
             print("there is no pulsar on {file}".format(file=file_path))
-            os.remove(file_path)
+            os.remove(join(dir_path, file_path))
 
 
 def copy_all_fou_files(src_dir, dest_dir):
@@ -112,6 +114,7 @@ def merge_all_specters(dir_path):
     with open(dir_path + "/total.txt", 'w') as out:
         out.write(str_result)
 
+
 for line in content:
     if "NAME" in line:
         continue
@@ -123,10 +126,9 @@ for line in content:
         config_path = 'configs/{name}_config.json'.format(name=pulsar.name)
         with open(config_path, 'w') as outfile:
             json.dump(config, outfile)
-        command = "/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config {config}".format(
-            config=config_path)
-        print(command)
-        os.system(command)
+        # command = "/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config {config}".format(
+        #     config=config_path)
+        # os.system(command)
         extract_specters(config['outputPath'], pulsar.ray())
         analyze_specters(join(config['outputPath'], "actual"))
         copy_all_fou_files(join(config['outputPath'], "actual"), "/home/sorrow/learndata")

@@ -1,0 +1,9 @@
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/B1237+25_config.json
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/B1905+39_config.json
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/B1919+21_config.json
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/B2016+28_config.json
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/B2020+28_config.json
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/B2154+40_config.json
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/B2303+30_config.json
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/B2315+21_config.json
+/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config /home/sorrow/CLionProjects/prao-cnn/data_preparator/configs/J0611+30_config.json
