@@ -16,9 +16,7 @@ from os import listdir
 from os.path import isfile, join, isdir
 from random import randint
 
-content = []
-with open("pulsars.txt") as f:
-    content = f.readlines()
+
 
 
 def prepare_config(pulsar):
@@ -27,9 +25,9 @@ def prepare_config(pulsar):
     start_date_shifted = pulsar.msk_begin - datetime.timedelta(seconds=duration / 2)
     config_data['startDate'] = start_date_shifted.strftime('%Y-%m-%d %H:%M:%S')
     config_data['endDate'] = start_date_shifted.strftime('%Y-%m-%d %H:%M:%S')
-    config_data['observationLength'] = 149
+    config_data['observationLength'] = 29
     config_data['range'] = pulsar.range
-    config_data['outputPath'] = '/home/sorrow/prao-output-main/{name}/'.format(name=pulsar.name)
+    config_data['outputPath'] = '/home/sorrow/prao-output-validate/{name}/'.format(name=pulsar.name)
     config_data['mode'] = '.pnt'
     config_data["fileListPath"] = "/home/sorrow/CLionProjects/prao-cnn/01-15-list-files.txt"
     config_data["calibrationListPath"] = "/home/sorrow/CLionProjects/prao-cnn/01-15-calb.txt"
@@ -130,11 +128,14 @@ def extract_dump_data(dir_path, ray, name):
                     randray = randint(1, 48)
                     while randray in raylist:
                         randray = randint(1, 48)
-                    dest = join("/home/sorrow/dumpdata",
+                    dest = join("/home/sorrow/dumpdata_validate",
                                 "{name}_{subdir}_{ray}.fou".format(name=name, subdir=subdir, ray=randray))
                     copyfile(join(dir_path, subdir1, subdir, "{ray}.fou".format(ray=randray)), dest)
 
 
+content = []
+with open("pulsars2.txt") as f:
+    content = f.readlines()
 for line in content:
     if "NAME" in line:
         continue
@@ -143,7 +144,7 @@ for line in content:
     if pulsar.ray() is not None and pulsar.range == "N1":
         print("processing", pulsar.name)
         config = prepare_config(pulsar)
-        config_path = 'configs/{name}_config.json'.format(name=pulsar.name)
+        config_path = 'configs2/{name}_config.json'.format(name=pulsar.name)
         with open(config_path, 'w') as outfile:
             json.dump(config, outfile)
         # command = "/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config {config}".format(
@@ -152,6 +153,6 @@ for line in content:
         # extract_specters(config['outputPath'], pulsar.ray())
         # analyze_specters(join(config['outputPath'], "actual"))
         # copy_all_fou_files(join(config['outputPath'], "actual"), "/home/sorrow/learndata")
-        extract_dump_data(config['outputPath'], pulsar.ray(), pulsar.name)
-merge_all_specters("/home/sorrow/learndata")
-merge_all_specters("/home/sorrow/dumpdata")
+        #extract_dump_data(config['outputPath'], pulsar.ray(), pulsar.name)
+#merge_all_specters("/home/sorrow/learndata_validate")
+#merge_all_specters("/home/sorrow/dumpdata_validate")
