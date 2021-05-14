@@ -128,7 +128,7 @@ def extract_dump_data(dir_path, ray, name):
                     randray = randint(1, 48)
                     while randray in raylist:
                         randray = randint(1, 48)
-                    dest = join("/home/sorrow/dumpdata_validate",
+                    dest = join("/home/sorrow/dumpdata_vaildate",
                                 "{name}_{subdir}_{ray}.fou".format(name=name, subdir=subdir, ray=randray))
                     copyfile(join(dir_path, subdir1, subdir, "{ray}.fou".format(ray=randray)), dest)
 
@@ -144,15 +144,15 @@ for line in content:
     if pulsar.ray() is not None and pulsar.range == "N1":
         print("processing", pulsar.name)
         config = prepare_config(pulsar)
-        config_path = 'configs2/{name}_config.json'.format(name=pulsar.name)
-        with open(config_path, 'w') as outfile:
-            json.dump(config, outfile)
+        # config_path = 'configs2/{name}_config.json'.format(name=pulsar.name)
+        # with open(config_path, 'w') as outfile:
+        #     json.dump(config, outfile)
         # command = "/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config {config}".format(
         #     config=config_path)
         # os.system(command)
-        # extract_specters(config['outputPath'], pulsar.ray())
-        # analyze_specters(join(config['outputPath'], "actual"))
-        # copy_all_fou_files(join(config['outputPath'], "actual"), "/home/sorrow/learndata")
-        #extract_dump_data(config['outputPath'], pulsar.ray(), pulsar.name)
-#merge_all_specters("/home/sorrow/learndata_validate")
-#merge_all_specters("/home/sorrow/dumpdata_validate")
+        extract_specters(config['outputPath'], pulsar.ray())
+        analyze_specters(join(config['outputPath'], "actual"))
+        copy_all_fou_files(join(config['outputPath'], "actual"), "/home/sorrow/learndata_validate")
+        extract_dump_data(config['outputPath'], pulsar.ray(), pulsar.name)
+merge_all_specters("/home/sorrow/learndata_validate")
+merge_all_specters("/home/sorrow/dumpdata_vaildate")
