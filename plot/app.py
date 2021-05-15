@@ -56,7 +56,7 @@ def run(dir_path):
     runtime['files'] = list(
         map(os.path.basename, glob.glob(os.path.expanduser(runtime['dir_path'] + os.sep + "*.fou"))))
     runtime['files'] += list(map(os.path.basename, glob.glob(os.path.expanduser(runtime['dir_path'] + os.sep + "*.praw"))))
-    runtime['files'].sort(key=lambda fname: int(fname[:fname.index(".")]))
+    #runtime['files'].sort(key=lambda fname: int(fname[:fname.index(".")]))
     logger.debug("need to sort:")
     logger.debug(runtime['files'])
     if len(runtime['files']) == 0:
@@ -102,8 +102,8 @@ def run(dir_path):
         df = runtime['df']
         traces = []
         traces.append(go.Scatter(
-            x=df['channel'],
-            y=df['modulus'],
+            x=df['channel'][1:],
+            y=df['modulus'][1:],
             x0=0,
             y0=0,
             mode='lines+markers',

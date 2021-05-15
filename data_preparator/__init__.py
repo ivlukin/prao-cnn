@@ -79,7 +79,7 @@ def has_pulsar(signals):
     index = 0
     for i in range(len(isignals) // 50):
         batch = isignals[index:index + 50]
-        if (max(batch) / statistics.median(batch)) > 3:
+        if (max(batch) / statistics.median(batch)) > 5:
             count += 1
         index += 50
 
@@ -92,7 +92,6 @@ def analyze_specters(dir_path):
     for file_path in files:
         amplitudes = read_fou_file(join(dir_path, file_path))
         if not has_pulsar(amplitudes):
-            print("there is no pulsar on {file}".format(file=file_path))
             os.remove(join(dir_path, file_path))
 
 
@@ -149,9 +148,9 @@ for line in content:
         # command = "/home/sorrow/CLionProjects/prao-cnn/cmake-build-release/prao_cnn -config {config}".format(
         #     config=config_path)
         # os.system(command)
-        # extract_specters(config['outputPath'], pulsar.ray())
-        # analyze_specters(join(config['outputPath'], "actual"))
-        # copy_all_fou_files(join(config['outputPath'], "actual"), "/home/sorrow/learndata")
+        extract_specters(config['outputPath'], pulsar.ray())
+        analyze_specters(join(config['outputPath'], "actual"))
+        copy_all_fou_files(join(config['outputPath'], "actual"), "/home/sorrow/learndata")
         extract_dump_data(config['outputPath'], pulsar.ray(), pulsar.name)
 merge_all_specters("/home/sorrow/learndata")
 merge_all_specters("/home/sorrow/dumpdata")
