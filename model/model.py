@@ -1,6 +1,7 @@
 import math
+from keras.callbacks import ModelCheckpoint
 from keras.models import Sequential
-from keras.layers import Dense, Conv1D, MaxPooling1D, Flatten, Activation, GlobalMaxPooling1D
+from keras.layers import Dense, Conv1D, MaxPooling1D, Flatten, Activation, GlobalMaxPooling1D, Dropout
 import numpy as np
 
 
@@ -23,14 +24,18 @@ def load_file(file_path):
 
 
 print("reading...")
-x_pulsars_validate = load_file("/home/sorrow/Рабочий стол/total_validate.txt")
-x_dump_validate = load_file("/home/sorrow/Рабочий стол/dump_validate.txt")
+x_pulsars_validate = load_file("/home/sorrow/learndata_validate/total.txt")
+x_dump_validate = load_file("/home/sorrow/dumpdata_validate/total.txt")
 x_pulsars = load_file("/home/sorrow/learndata/total.txt")
 x_dump = load_file("/home/sorrow/dumpdata/total.txt")
 
 data_length = min(len(x_pulsars), len(x_dump))
 x_pulsars = x_pulsars[:data_length]
 x_dump = x_dump[:data_length]
+
+data_length = min(len(x_pulsars_validate), len(x_dump_validate))
+x_pulsars_validate = x_pulsars_validate[:data_length]
+x_dump_validate = x_dump_validate[:data_length]
 
 X, Y = [], []
 X_validate, Y_validate = [], []
@@ -69,14 +74,17 @@ model.add(Conv1D(kernel_size=5, padding='same', strides=2, filters=128, activati
 model.add(GlobalMaxPooling1D())
 model.add(Flatten())
 model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.5))
 model.add(Dense(1, activation='sigmoid'))
 
 print("compiling...")
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 print("fitting...")
 
-model.fit(X, Y, epochs=100, batch_size=64, verbose=2)
+mcp_save = ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='min')
+model.fit(X, Y, epochs=50, batch_size=128, verbose=1, validation_data=(X_validate, Y_validate), callbacks=[mcp_save])
 
 _, accuracy = model.evaluate(X_validate, Y_validate)
 print('Accuracy: %.2f' % (accuracy * 100))
 model.save("prao_model")
+print(model.summary())

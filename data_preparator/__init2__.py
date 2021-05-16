@@ -77,7 +77,7 @@ def has_pulsar(signals):
     index = 0
     for i in range(len(isignals) // 50):
         batch = isignals[index:index + 50]
-        if (max(batch) / statistics.median(batch)) > 3:
+        if (max(batch) / statistics.median(batch)) > 5:
             count += 1
         index += 50
 
@@ -128,7 +128,7 @@ def extract_dump_data(dir_path, ray, name):
                     randray = randint(1, 48)
                     while randray in raylist:
                         randray = randint(1, 48)
-                    dest = join("/home/sorrow/dumpdata_vaildate",
+                    dest = join("/home/sorrow/dumpdata_validate",
                                 "{name}_{subdir}_{ray}.fou".format(name=name, subdir=subdir, ray=randray))
                     copyfile(join(dir_path, subdir1, subdir, "{ray}.fou".format(ray=randray)), dest)
 
@@ -155,4 +155,4 @@ for line in content:
         copy_all_fou_files(join(config['outputPath'], "actual"), "/home/sorrow/learndata_validate")
         extract_dump_data(config['outputPath'], pulsar.ray(), pulsar.name)
 merge_all_specters("/home/sorrow/learndata_validate")
-merge_all_specters("/home/sorrow/dumpdata_vaildate")
+merge_all_specters("/home/sorrow/dumpdata_validate")
