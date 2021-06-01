@@ -9,6 +9,7 @@ from shutil import copyfile
 from tensorflow import keras
 
 INPUT_FOLDER = '/home/sorrow/latest_data/'
+BORDER = 0.3
 OUTPUT_FOLDER = os.path.join(INPUT_FOLDER, "classified")
 Path(OUTPUT_FOLDER).mkdir(parents=True, exist_ok=True)
 
@@ -37,10 +38,10 @@ for path in Path(INPUT_FOLDER).glob("**/*.fou"):
     signals = signals.reshape((1, signals.shape[0], 1))
     prediction = prao_model.predict(signals)
     count += 1
-    if prediction.min() < 0.5:
+    if prediction[0][0] < BORDER:
         print("found!")
         new_name = "{tm}_{ray}".format(tm=path.parts[-2], ray=path.parts[-1])
         new_name = os.path.join(OUTPUT_FOLDER, new_name)
         copyfile(path, new_name)
-    if count > 200:
-        break
+    if count % 500 == 0:
+        print(count)

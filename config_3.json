@@ -1,0 +1,16 @@
+{
+  "startDate": "2021-05-01 00:00:00",
+  "endDate": "2021-05-01 06:00:00",
+  "observationLength": 1,
+  "range": "N1",
+  "step": 60,
+  "outputPath": "/home/sorrow/latest_data",
+  "mode": ".pnt",
+  "fileListPath": "/home/sorrow/CLionProjects/prao-cnn/05-21-list-files.txt",
+  "calibrationListPath": "/home/sorrow/CLionProjects/prao-cnn/2021-calb.txt",
+  "durationStarSeconds": 204.8,
+  "summationEnabled": false,
+  "writeRawData": false,
+  "deviceNumber": 1
+}
+
